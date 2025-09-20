@@ -21,22 +21,28 @@
             user-select: none;
             touch-action: manipulation;
             cursor: pointer;
+            text-align: center;
         }
 
         .hand {
             font-size: 8rem;
-            animation: pop 0.5s ease;
+            animation: pop 0.6s ease;
         }
 
         @keyframes pop {
             0% { transform: scale(0); opacity: 0; }
-            70% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); }
+            70% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .hint {
+            color: #bbb;
+            font-size: 1.5rem;
         }
     </style>
 
     <div id="touch-area">
-        <span class="text-muted">اضغط ببصمتك لإضافة كف</span>
+        <span class="hint">اضغط ببصمتك لإضافة كف</span>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -44,19 +50,19 @@
         const area = document.getElementById("touch-area");
 
         area.addEventListener("click", () => {
-            addHand();
+            showHand();
 
-            // إرسال Ajax للـ Laravel
+            // إرسال Ajax للـ Laravel → يولد event عبر Pusher
             $.post("{{ url('/hope/add-hand') }}", {
                 _token: "{{ csrf_token() }}",
                 hand: "🖐️"
             });
         });
 
-        function addHand() {
+        function showHand() {
             area.innerHTML = "<div class='hand'>🖐️</div>";
             setTimeout(() => {
-                area.innerHTML = "<span class='text-muted'>اضغط ببصمتك لإضافة كف</span>";
+                area.innerHTML = "<span class='hint'>اضغط ببصمتك لإضافة كف</span>";
             }, 1000);
         }
     </script>

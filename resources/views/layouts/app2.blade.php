@@ -267,39 +267,6 @@
 
 {{-- JavaScript --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script>
-    function toggleMobileMenu() {
-        const nav = document.getElementById('mainNav');
-        const toggleBtn = document.querySelector('.mobile-menu-toggle i');
 
-        if (nav.classList.contains('show')) {
-            nav.classList.remove('show');
-            toggleBtn.className = 'bi bi-list';
-        } else {
-            nav.classList.add('show');
-            toggleBtn.className = 'bi bi-x-lg';
-        }
-    }
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const nav = document.getElementById('mainNav');
-        const toggleBtn = document.querySelector('.mobile-menu-toggle');
-
-        if (!nav.contains(event.target) && !toggleBtn.contains(event.target)) {
-            nav.classList.remove('show');
-            document.querySelector('.mobile-menu-toggle i').className = 'bi bi-list';
-        }
-    });
-
-    // Close mobile menu when window is resized to desktop
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 992) {
-            const nav = document.getElementById('mainNav');
-            nav.classList.remove('show');
-            document.querySelector('.mobile-menu-toggle i').className = 'bi bi-list';
-        }
-    });
-</script>
 </body>
 </html>

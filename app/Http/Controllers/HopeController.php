@@ -13,14 +13,6 @@ class HopeController extends Controller
         return view('hope.create');
     }
 
-    public function handOn()
-    {
-
-        Route::post('/hope/add-hand', function () {
-            event(new NewHandAdded('🖐️'));
-            return response()->json(['status' => 'sent']);
-        });
-    }
 
     public function show()
     {
