@@ -35,7 +35,7 @@
 
         .hand {
             position: absolute;
-            width: 70px; /* حجم الكف */
+            width: 70px;
             height: auto;
             transform: translate(-50%, -50%);
             animation: pop 0.6s ease;
@@ -76,16 +76,16 @@
         });
 
         let hands = [];
-        const maxHands = 30;
+        const maxHands = 21;
         const positions = [];
 
-        // حساب شكل قلب حوالين "أمل"
+        // القلب لأول 20 كف
         const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2 + 50; // ننزله تحت شوية
-        const scale = 20; // تكبير القلب
+        const centerY = window.innerHeight / 2 ;
+        const scale = 20;
 
-        for (let i = 0; i < maxHands; i++) {
-            const t = Math.PI - (i / maxHands) * 2 * Math.PI; // توزيع النقاط
+        for (let i = 0; i < maxHands - 1; i++) {
+            const t = Math.PI - (i / (maxHands - 1)) * 2 * Math.PI;
             const x = 16 * Math.pow(Math.sin(t), 3);
             const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
 
@@ -95,15 +95,21 @@
             });
         }
 
+        // اليد رقم 21 على يمين القلب
+        positions.push({
+            x: centerX + 200, // على يمين القلب
+            y: centerY + 200       // نفس المستوى الرأسي
+        });
+
         // الاستماع للقناة
         window.Echo.channel("hope-channel")
             .listen(".new-hand", (data) => {
                 const container = document.getElementById("container");
 
                 if (hands.length < maxHands) {
-                    // لسه في مكان فاضي
+                    // أول 21 كف
                     const handEl = document.createElement("img");
-                    handEl.src = "{{ asset('storage/hand.png') }}"; // صورة الكف
+                    handEl.src = "{{ asset('storage/hand.png') }}";
                     handEl.className = "hand";
                     handEl.dataset.index = hands.length;
 
@@ -114,19 +120,20 @@
                     container.appendChild(handEl);
                     hands.push(handEl);
                 } else {
-                    // استبدل الأقدم بنفس مكانه
-                    const oldHand = hands.shift();
-                    const oldIndex = oldHand.dataset.index;
-
-                    oldHand.classList.add("fade-out");
-                    setTimeout(() => oldHand.remove(), 500);
+                    // استبدال الكف الأخير فقط (رقم 21)
+                    const oldHand = hands.find(h => h.dataset.index == 20);
+                    if (oldHand) {
+                        oldHand.classList.add("fade-out");
+                        setTimeout(() => oldHand.remove(), 500);
+                        hands = hands.filter(h => h !== oldHand);
+                    }
 
                     const handEl = document.createElement("img");
                     handEl.src = "{{ asset('storage/hand.png') }}";
                     handEl.className = "hand";
-                    handEl.dataset.index = oldIndex;
+                    handEl.dataset.index = 20;
 
-                    const pos = positions[oldIndex];
+                    const pos = positions[20];
                     handEl.style.left = pos.x + "px";
                     handEl.style.top = pos.y + "px";
 
