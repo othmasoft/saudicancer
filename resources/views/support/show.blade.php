@@ -1,117 +1,108 @@
-@extends('layouts.app2')
+@extends('layouts.app3')
 
-@section('title', 'عرض رسائل الدعم')
+@section('title', 'بصمة أمل - رسائل الدعم')
 
 @section('content')
-    <div class="row justify-content-center mt-4">
-        <div class="col-md-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: #fcf5f2; /* لون خلفية للفراغات */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-            <div class="text-center mb-4">
-                <div class="text-center mb-4">
-                    <img id="support-image"
-                         src="{{ asset('storage/support3.png') }}"
-                         alt="جمعية السرطان السعودية"
-                         class="img-fluid"
-                         style="max-height:500px;"
-                         loading="lazy">
-                </div>
+        #hand-container {
+            position: relative;
+            height: 90vh;             /* 80% من ارتفاع الشاشة */
+            width: calc(90vh * 1.3);  /* العرض = الارتفاع × النسبة (1.3) */
+            max-width: 1300px;
+            max-height: 1000px;
+            background: url('{{ asset("storage/hand.jpeg") }}') no-repeat center center;
+            background-size: contain; /* الصورة كاملة بدون قص */
+            background-position: center center;
+            margin: auto;
+        }
+
+
+        .box {
+            position: absolute;
+            width: 12%;
+            height: 6%;
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            font-size: 0.9vw;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        /* مثال لمواضع */
+        .box1  { top: 85%; left: 14%;  transform: rotate(-38deg);}
+        .box2  { top: 75%; left: 9%;  transform: rotate(-38deg);}
+        .box3  { top: 65%; left: 7%;  transform: rotate(-38deg);}
+        .box4  { top: 50%; left: 50%; }
+        .box5  { top: 60%; left: 50%; }
+        .box6  { top: 70%; left: 50%; }
+        .box7  { top: 80%; left: 50%; }
+        .box8  { top: 90%; left: 50%; }
+        .box9 { top: 20%; left: 50%; }
+        .box10  { top: 30%; left: 50%; }
+        .box11  { top: 40%; left: 50%; }
+        .box12  { top: 50%; left: 50%; }
+        .box13 { top: 60%; left: 50%; }
+        .box14  { top: 70%; left: 50%; }
+        .box15  { top: 80%; left: 50%; }
+        .box16  { top: 90%; left: 50%; }
+        .box17  { top: 40%; left: 50%; }
+        .box18  { top: 40%; left: 50%; }
+        .box19  { top: 40%; left: 50%; }
+        .box20  { top: 40%; left: 50%; }
+
+    </style>
+
+    <div id="hand-container">
+        @for($i = 1; $i <= 20; $i++)
+            <div class="box box{{ $i }}">
+                {{ $i }}    {{ $supports[$i-1]->message ?? '' }}
             </div>
-
-            <div id="last-message">
-                @if($support)
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <strong>{{ $support->subject ?? '' }}</strong>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-2">{{ $support->message }}</p>
-                            <small class="text-muted">
-                                {{ $support->name ?? '' }}
-                            </small>
-                        </div>
-                    </div>
-                @else
-                    <div class="alert alert-info text-center">
-                        لا توجد رسائل
-                    </div>
-                @endif
-            </div>
-
-        </div>
+        @endfor
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        /* حركة بسيطة */
-        .flash {
-            animation: flash-bg 1s ease-in-out 3;
-        }
-        @keyframes flash-bg {
-            0%, 100% { background-color: #fff; }
-            50% { background-color: #2a6571; }
-        }
-    </style>
     <script>
-        let lastMessageId = @json($support?->id);
+        let currentIndex = 0;
 
-        function fetchLastMessage() {
-            $.ajax({
-                url: "{{ route('support.show') }}",
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
-                    if (data.message) {
-                        if (data.message.id !== lastMessageId) {
-                            lastMessageId = data.message.id;
-
-                            // تحديث الرسالة
-                            $('#last-message').html(`
-                        <div class="card shadow-sm flash">
-                            <div class="card-header bg-primary text-white">
-                                <strong>${data.message.subject ?? ''}</strong>
-                            </div>
-                            <div class="card-body">
-                                <p class="mb-2">${data.message.message}</p>
-                                <small class="text-muted">
-                                    ${data.message.name ?? ''}
-                                </small>
-                            </div>
-                        </div>
-                    `);
-
-                            // شغل حركة الصورة مع الرسالة الجديدة
-                            let img = document.getElementById('support-image');
-                            img.classList.add('pulse');
-                            setTimeout(() => {
-                                img.classList.remove('pulse');
-                            }, 1000); // نفس مدة الأنيميشن
-                        }
-                    } else {
-                        $('#last-message').html(`
-                    <div class="alert alert-info text-center">
-                        لا توجد رسائل
-                    </div>
-                `);
+        function fetchMessages() {
+            $.get("{{ route('support.show') }}", (data) => {
+                if (data.message) {
+                    let message = data.message.trim(); // نشيل أي "" أو مسافات
+                    // نحدد أي box هيتملي
+                    let boxNumber = data.count;
+                    if (boxNumber > 20) {
+                        boxNumber = 20; // بعد الـ 20 هنغير بس آخر box
                     }
+
+                    $(`.box${boxNumber}`).html(message.substring(0,40));
+
                 }
             });
         }
 
-        // تحديث كل ثانية
-        setInterval(fetchLastMessage, 1000);
-
+        // كل 2 ثانية يجيب الرسالة اللي بعد كده
+        setInterval(fetchMessages, 2000);
     </script>
-    <style>
-        /* حركة تكبير/تصغير (Pulse) */
-        .pulse {
-            animation: pulse 1s ease-in-out;
-        }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
 
-    </style>
+
+
 @endsection

@@ -67,25 +67,30 @@ class SupportController extends Controller
                 ->with('success', __('app.support_message_sent_successfully'));
 
         } catch (\Exception $e) {
-            dd($e);
-
             return redirect()->back()
                 ->with('error', __('app.error_occurred'))
                 ->withInput();
         }
     }
 
+
     public function show(Request $request)
     {
-        $support = Support::latest('created_at')
-            ->first();
-
         if ($request->ajax()) {
-            return response()->json(['message' => $support]);
+            $count = Support::count();
+            $lastMessage = Support::orderBy('id', 'desc')->first();
+
+            return response()->json([
+                'count'   => $count,
+                'message' => $lastMessage ? trim($lastMessage->message) : null
+            ]);
         }
 
-        return view('support.show', compact('support'));
+        $supports = Support::take(20)->get();
+        return view('support.show', compact('supports'));
     }
+
+
 
 
     /**

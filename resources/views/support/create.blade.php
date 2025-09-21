@@ -8,7 +8,7 @@
 
             {{-- Page Header --}}
             <div class="text-center mb-4">
-                <h1 class="display-6 text-primary mb-3">
+                <h1 class="display-6     mb-3">
                     <i class="bi bi-plus-circle"></i>
                     أكـتـب رسـالة دعـم
                 </h1>
@@ -42,18 +42,13 @@
 
             {{-- Support Form Card --}}
             <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white text-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-envelope-fill me-2"></i>
-                        نموذج الرسـالة
-                    </h5>
-                </div>
 
                 <div class="card-body p-4">
                     <form action="{{ route('support.store') }}" method="POST">
                         @csrf
 
                         <div class="row">
+                            <!--
                             {{-- Name Field --}}
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label ">
@@ -86,7 +81,7 @@
                                 @enderror
                             </div>
                         </div>
-
+-->
                         {{-- Message Field --}}
                         <div class="mb-4">
                             <label for="message" class="form-label required">
@@ -96,7 +91,7 @@
                             <textarea class="form-control @error('message') is-invalid @enderror"
                                       id="message"
                                       name="message"
-                                      rows="6"
+                                      rows="3"
                                       placeholder="أكتب رسالة دعم هنا ..."
                                       required>{{ old('message') }}</textarea>
                             <div class="form-text">الحد الأدنى 10 أحرف</div>
@@ -106,11 +101,7 @@
                         </div>
 
                         {{-- Submit Buttons --}}
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{{ route('support.index') }}" class="btn btn-outline-secondary btn-lg me-md-2">
-                                <i class="bi bi-arrow-right-circle me-2"></i>
-                                رجوع
-                            </a>
+                        <div class="d-grid gap-2 d-md-flex justify-content-center">
                             <button type="submit" class="btn btn-success btn-lg">
                                 <i class="bi bi-send-fill me-2"></i>
                                 إرسال الرسالة
@@ -120,13 +111,6 @@
                 </div>
             </div>
 
-            {{-- Help Text --}}
-            <div class="text-center mt-4">
-                <small class="text-muted">
-                    <i class="bi bi-info-circle me-1"></i>
-                    جميع المعلومات المرسلة آمنة ومحمية وسيتم التعامل معها بسرية تامة
-                </small>
-            </div>
         </div>
     </div>
 

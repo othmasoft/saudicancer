@@ -42,15 +42,6 @@
             font-display: swap;
         }
 
-
-        body {
-
-            background: url('{{ asset("storage/pattern.png") }}') repeat;
-
-        }
-
-
-
     </style>
 </head>
 <body>

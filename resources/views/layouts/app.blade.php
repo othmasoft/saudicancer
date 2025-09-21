@@ -69,7 +69,7 @@
 
         /* Header Styling */
         header {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 70%, rgba(255, 255, 255, 0.3) 100%);
             flex-shrink: 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
@@ -86,10 +86,12 @@
         }
 
         .logo {
-            height: 50px;
+            height: 70px;
             width: auto;
             object-fit: contain;
             transition: transform 0.2s ease;
+            position: absolute;
+            right: -20px;
         }
 
         .logo:hover {
@@ -204,7 +206,7 @@
 
         @media (max-width: 768px) {
             .logo {
-                height: 35px;
+                height: 50px;
             }
 
             .brand-title {
@@ -266,6 +268,8 @@
                      alt="جمعية السرطان السعودية"
                      class="logo me-3"
                      loading="lazy">
+            </div>
+            <div class="d-flex align-items-center header-brand" style="padding-right: 20px">
                 <h2 class="mb-0 brand-title">جمعية السرطان السعودية</h2>
             </div>
 
