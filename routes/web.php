@@ -7,6 +7,7 @@ use App\Http\Controllers\HopeController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\FutureController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\QuestionController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -29,10 +30,21 @@ Route::post('/hope/add-hand', function (\Illuminate\Http\Request $request) {
     return response()->json(['status' => 'sent']);
 });
 
-// Gift Page
-Route::get('/gift/index', [FutureController::class, 'index'])->name('gift.index');
-Route::get('/gift/answer', [FutureController::class, 'answer'])->name('gift.answer');
 
+// Questions Routes
+Route::prefix('questions')->name('questions.')->group(function () {
+
+    // Public routes
+    Route::get('/', [QuestionController::class, 'index'])->name('index');
+    Route::get('/random', [QuestionController::class, 'random'])->name('random');
+    Route::get('/quiz', [QuestionController::class, 'quiz'])->name('quiz');
+    Route::post('/quiz/submit', [QuestionController::class, 'submitQuiz'])->name('quiz.submit');
+    Route::get('/{id}', [QuestionController::class, 'show'])->name('show');
+    Route::post('/{id}/check', [QuestionController::class, 'checkAnswer'])->name('check');
+
+    // API routes
+    Route::get('/api/stats', [QuestionController::class, 'getStats'])->name('api.stats');
+});
 
 // Support Page
 Route::get('/support', [SupportController::class, 'index'])->name('support.index');

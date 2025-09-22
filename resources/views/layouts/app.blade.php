@@ -297,7 +297,7 @@
                     <i class="bi bi-stars"></i>
                     قصص الأمل
                 </a>
-                <a href="{{ route('gift.index') }}" class="nav-link {{ Request::routeIs('gift.*') ? 'active' : '' }}">
+                <a href="{{ route('questions.random') }}" class="nav-link {{ Request::routeIs('gift.*') ? 'active' : '' }}">
                     <i class="bi bi-gift-fill"></i>
                     جدار الهدايا
                 </a>

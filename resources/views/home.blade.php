@@ -143,7 +143,7 @@
                             <p class="card-text text-muted mb-4">
                                 شارك وتلقى الهدايا المعنوية والتشجيع
                             </p>
-                            <a href="{{ route('gift.index') }}" class="btn btn-light btn-lg w-100">
+                            <a href="{{ route('questions.random') }}" class="btn btn-light btn-lg w-100">
                                 <i class="bi bi-box2-heart me-2"></i>
                                 استكشف الهدايا
                             </a>
