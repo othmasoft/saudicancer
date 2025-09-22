@@ -60,10 +60,15 @@
         });
 
         function showHand() {
-            area.innerHTML = "<div class='hand'>🖐️</div>";
+            area.innerHTML = `
+        <div class="hand">
+            <img src="{{ asset('storage/hand.png') }}" />
+        </div>
+    `;
             setTimeout(() => {
-                area.innerHTML = "<span class='hint'>اضغط ببصمتك لإضافة كف</span>";
+                area.innerHTML = `<span class="hint">اضغط ببصمتك لإضافة كف</span>`;
             }, 1000);
         }
+
     </script>
 @endsection

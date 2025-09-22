@@ -284,10 +284,7 @@
                     <i class="bi bi-house-fill"></i>
                     الرئيسية
                 </a>
-                <a href="{{ route('support.show') }}" class="nav-link {{ Request::routeIs('support.*') ? 'active' : '' }}">
-                    <i class="bi bi-headset"></i>
-                    الدعم الفني
-                </a>
+
                 <a href="{{ route('future.create') }}" class="nav-link {{ Request::routeIs('future.create') ? 'active' : '' }}">
                     <i class="bi bi-send-fill"></i>
                     رسالة المستقبل

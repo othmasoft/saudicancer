@@ -41,6 +41,17 @@
             font-style: normal;
             font-display: swap;
         }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: #fcf5f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
     </style>
 </head>

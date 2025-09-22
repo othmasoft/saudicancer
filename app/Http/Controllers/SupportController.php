@@ -36,7 +36,7 @@ class SupportController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'subject' => 'nullable|string|max:255',
-            'message' => 'required|string|min:10',
+            'message' => 'required|string|min:10|max:40',
         ], [
             'name.string' => 'الاسم يجب أن يكون نص',
             'email.email' => 'البريد الإلكتروني غير صالح',
@@ -44,6 +44,7 @@ class SupportController extends Controller
             'subject.string' => 'الموضوع يجب أن يكون نص',
             'message.required' => 'الرسالة مطلوبة',
             'message.min' => 'الرسالة يجب ألا تقل عن 10 حروف',
+            'message.max' => 'الرسالة يجب ألا تزيد عن 40 حروف',
         ]);
 
         if ($validator->fails()) {

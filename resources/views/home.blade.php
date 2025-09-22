@@ -4,19 +4,10 @@
 
 @section('content')
 
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-center mt-3">
         <div class="col-md-10">
 
-            {{-- Page Header --}}
-            <div class="text-center mb-4">
-                <h1 class="display-6 text-primary mb-3">
-                    <i class="bi bi-heart-fill text-danger me-2"></i>
-                    الخدمات والدعم
-                </h1>
-                <p class="lead text-muted">
-                    نحن معك في رحلتك... اختر الخدمة التي تناسبك
-                </p>
-            </div>
+
 
             <div class="row g-4">
 
@@ -24,14 +15,14 @@
                 <div class="col-12">
                     <h4 class="text-primary mb-3 border-bottom border-primary pb-2">
                         <i class="bi bi-headset me-2"></i>
-                        خدمات الدعم الفني
+                       رسائل الدعم
                     </h4>
                 </div>
 
                 {{-- إضافة رسالة دعم --}}
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm border-0 hover-card">
-                        <div class="card-body text-center p-4">
+                        <div class="card-body text-center p-3">
                             <div class="icon-circle bg-success mb-3">
                                 <i class="bi bi-plus-circle-fill text-white"></i>
                             </div>
@@ -50,7 +41,7 @@
                 {{-- عرض رسائل الدعم --}}
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm border-0 hover-card">
-                        <div class="card-body text-center p-4">
+                        <div class="card-body text-center p-3">
                             <div class="icon-circle bg-info mb-3">
                                 <i class="bi bi-chat-dots-fill text-white"></i>
                             </div>
@@ -70,14 +61,62 @@
                 <div class="col-12 mt-5">
                     <h4 class="text-primary mb-3 border-bottom border-primary pb-2">
                         <i class="bi bi-clock-history me-2"></i>
-                        خدمات المستقبل والأمل
+                        ضع بصمتك
+                    </h4>
+                </div>
+
+
+                {{-- بصمة أمل - إنشاء --}}
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 hover-card">
+                        <div class="card-body text-center p-3">
+                            <div class="icon-circle bg-primary mb-3">
+                                <i class="bi bi-hand-thumbs-up-fill text-white"></i>
+                            </div>
+                            <h5 class="card-title text-primary mb-3">ضع بصمة أمل</h5>
+                            <p class="card-text text-muted mb-4">
+                                ضع بصمتك والهم الاخرين
+                            </p>
+                            <a href="{{ route('hope.create') }}" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-heart-fill me-2"></i>
+                                شارك قصتك
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{-- بصمات الأمل --}}
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 hover-card">
+                        <div class="card-body text-center p-3">
+                            <div class="icon-circle bg-accent mb-3">
+                                <i class="bi bi-stars text-white"></i>
+                            </div>
+                            <h5 class="card-title text-accent mb-3">بصمات الأمل</h5>
+                            <p class="card-text text-muted mb-4">
+عرض البصمات
+                            </p>
+                            <a href="{{ route('hope.show') }}" class="btn btn-accent btn-lg w-100">
+                                <i class="bi bi-book-half me-2"></i>
+                                اقرأ القصص
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Community Section --}}
+                <div class="col-12 mt-5">
+                    <h4 class="text-primary mb-3 border-bottom border-primary pb-2">
+                        <i class="bi bi-people-fill me-2"></i>
+                        المجتمع والتفاعل
                     </h4>
                 </div>
 
                 {{-- رسالة للمستقبل --}}
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm border-0 hover-card">
-                        <div class="card-body text-center p-4">
+                        <div class="card-body text-center p-3">
                             <div class="icon-circle bg-warning mb-3">
                                 <i class="bi bi-send-fill text-white"></i>
                             </div>
@@ -93,56 +132,10 @@
                     </div>
                 </div>
 
-                {{-- بصمة أمل - إنشاء --}}
-                <div class="col-md-6">
-                    <div class="card h-100 shadow-sm border-0 hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-circle bg-primary mb-3">
-                                <i class="bi bi-hand-thumbs-up-fill text-white"></i>
-                            </div>
-                            <h5 class="card-title text-primary mb-3">ضع بصمة أمل</h5>
-                            <p class="card-text text-muted mb-4">
-                                شارك قصة نجاحك وألهم الآخرين
-                            </p>
-                            <a href="{{ route('hope.create') }}" class="btn btn-primary btn-lg w-100">
-                                <i class="bi bi-heart-fill me-2"></i>
-                                شارك قصتك
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Community Section --}}
-                <div class="col-12 mt-5">
-                    <h4 class="text-primary mb-3 border-bottom border-primary pb-2">
-                        <i class="bi bi-people-fill me-2"></i>
-                        المجتمع والتفاعل
-                    </h4>
-                </div>
-
-                {{-- بصمات الأمل --}}
-                <div class="col-md-6">
-                    <div class="card h-100 shadow-sm border-0 hover-card">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-circle bg-accent mb-3">
-                                <i class="bi bi-stars text-white"></i>
-                            </div>
-                            <h5 class="card-title text-accent mb-3">بصمات الأمل</h5>
-                            <p class="card-text text-muted mb-4">
-                                اقرأ قصص الأمل والنجاح من المجتمع
-                            </p>
-                            <a href="{{ route('hope.show') }}" class="btn btn-accent btn-lg w-100">
-                                <i class="bi bi-book-half me-2"></i>
-                                اقرأ القصص
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
                 {{-- جدار الهدايا --}}
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm border-0 hover-card">
-                        <div class="card-body text-center p-4">
+                        <div class="card-body text-center p-3">
                             <div class="icon-circle bg-light mb-3">
                                 <i class="bi bi-gift-fill text-white"></i>
                             </div>
@@ -306,8 +299,20 @@
 
         .help-item h6 {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.1rem;
             color: var(--color-primary);
+        }
+
+        .card-body {
+            padding: 1rem !important; /* بدل 1.5rem أو 2rem */
+        }
+
+        .card-title {
+            margin-bottom: 0.1rem !important;
+        }
+
+        .card-text {
+            margin-bottom: 0.5rem !important;
         }
 
         /* Responsive Design */

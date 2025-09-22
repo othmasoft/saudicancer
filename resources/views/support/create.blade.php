@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app3')
 
 @section('title', 'إنشاء رسالة دعم جديدة')
 
@@ -10,7 +10,7 @@
             <div class="text-center mb-4">
                 <h1 class="display-6     mb-3">
                     <i class="bi bi-plus-circle"></i>
-                    أكـتـب رسـالة دعـم
+                    أكـتـب رسـالة الدعـم
                 </h1>
             </div>
 
@@ -94,7 +94,7 @@
                                       rows="3"
                                       placeholder="أكتب رسالة دعم هنا ..."
                                       required>{{ old('message') }}</textarea>
-                            <div class="form-text">الحد الأدنى 10 أحرف</div>
+                            <div class="form-text"> من 10 الى 40 حرف</div>
                             @error('message')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
