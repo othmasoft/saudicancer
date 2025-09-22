@@ -33,6 +33,23 @@
             pointer-events: none;
         }
 
+        #container img {
+            position: absolute;
+            max-width: 15vw; /* متجاوب حسب العرض */
+            height: auto;
+        }
+
+        .east-img {
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+        }
+
+        .logo-img {
+            top: 40%;
+            left: 5%;
+        }
+
         .hand {
             position: absolute;
             width: 70px;
@@ -58,7 +75,9 @@
     </style>
 
     <div id="container">
-        <div class="center-text">أمل</div>
+        <div class="center-text">بصمة وعي</div>
+        <img src="{{ asset('storage/east.png') }}" class="east-img" />
+        <img src="{{ asset('storage/logo.png') }}" class="logo-img" />
     </div>
 
     {{-- Laravel Echo + Pusher CDN --}}
@@ -76,29 +95,65 @@
         });
 
         let hands = [];
-        const maxHands = 21;
-        const positions = [];
+        const maxHands = 41; // 20 صغير + 20 كبير + اليد 41
+        let positions = [];
 
-        // القلب لأول 20 كف
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2 ;
-        const scale = 20;
+        function calculatePositions() {
+            positions = [];
 
-        for (let i = 0; i < maxHands - 1; i++) {
-            const t = Math.PI - (i / (maxHands - 1)) * 2 * Math.PI;
-            const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
 
+            // المقياس الأساسي حسب حجم الشاشة
+            const baseScale = Math.min(window.innerWidth, window.innerHeight) / 40;
+
+            // 🔹 القلب الصغير (20 كف)
+            const smallScale = baseScale * 0.9;
+            for (let i = 0; i < 20; i++) {
+                const t = Math.PI - (i / 20) * 2 * Math.PI;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+
+                positions.push({
+                    x: centerX + x * smallScale,
+                    y: centerY - y * smallScale
+                });
+            }
+
+            // 🔹 القلب الكبير (20 كف) — أكبر من الصغير بوضوح
+            const bigScale = baseScale * 1.5; // كبرنا الفارق
+            const offsetBigY = -baseScale * 3; // رفعناه لفوق شوية
+            for (let i = 0; i < 20; i++) {
+                const t = Math.PI - (i / 20) * 2 * Math.PI;
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+
+                positions.push({
+                    x: centerX + x * bigScale,
+                    y: centerY - y * bigScale + offsetBigY
+                });
+            }
+
+            // 🔹 اليد رقم 41 (على يمين القلب الكبير)
             positions.push({
-                x: centerX + x * scale,
-                y: centerY - y * scale
+                x: centerX + bigScale * 12,  // يمين القلب الكبير
+                y: centerY + bigScale * 1  // Slight down
             });
         }
 
-        // اليد رقم 21 على يمين القلب
-        positions.push({
-            x: centerX + 200, // على يمين القلب
-            y: centerY + 200       // نفس المستوى الرأسي
+        // أول حساب
+        calculatePositions();
+
+        // إعادة الحساب عند تغيير حجم الشاشة
+        window.addEventListener("resize", () => {
+            calculatePositions();
+            hands.forEach((handEl, index) => {
+                const pos = positions[index];
+                if (pos) {
+                    handEl.style.left = pos.x + "px";
+                    handEl.style.top = pos.y + "px";
+                }
+            });
         });
 
         // الاستماع للقناة
@@ -107,21 +162,20 @@
                 const container = document.getElementById("container");
 
                 if (hands.length < maxHands) {
-                    // أول 21 كف
                     const handEl = document.createElement("img");
                     handEl.src = "{{ asset('storage/hand.png') }}";
                     handEl.className = "hand";
                     handEl.dataset.index = hands.length;
 
                     const pos = positions[hands.length];
+                    handEl.style.position = "absolute";
                     handEl.style.left = pos.x + "px";
                     handEl.style.top = pos.y + "px";
 
                     container.appendChild(handEl);
                     hands.push(handEl);
                 } else {
-                    // استبدال الكف الأخير فقط (رقم 21)
-                    const oldHand = hands.find(h => h.dataset.index == 20);
+                    const oldHand = hands.find(h => h.dataset.index == maxHands - 1);
                     if (oldHand) {
                         oldHand.classList.add("fade-out");
                         setTimeout(() => oldHand.remove(), 500);
@@ -131,9 +185,10 @@
                     const handEl = document.createElement("img");
                     handEl.src = "{{ asset('storage/hand.png') }}";
                     handEl.className = "hand";
-                    handEl.dataset.index = 20;
+                    handEl.dataset.index = maxHands - 1;
 
-                    const pos = positions[20];
+                    const pos = positions[maxHands - 1];
+                    handEl.style.position = "absolute";
                     handEl.style.left = pos.x + "px";
                     handEl.style.top = pos.y + "px";
 
@@ -142,4 +197,10 @@
                 }
             });
     </script>
+
+
+
+
+
+
 @endsection

@@ -10,10 +10,16 @@ use App\Http\Controllers\SupportController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Future Page
-Route::get('/future/create', [FutureController::class, 'create'])->name('future.create');
-Route::get('/future/show', [FutureController::class, 'show'])->name('future.show');
+    // Future Page
+    Route::prefix('future')->name('future.')->group(function () {
+    Route::get('/', [FutureController::class, 'index'])->name('index');
+    Route::get('/show', [FutureController::class, 'show'])->name('show');
+    Route::get('/create', [FutureController::class, 'create'])->name('create');
+    Route::post('/store', [FutureController::class, 'store'])->name('store');
+    Route::get('/{id}', [FutureController::class, 'view'])->name('view');
+    Route::post('/search', [FutureController::class, 'searchByEmail'])->name('search');
+    Route::post('/preview', [FutureController::class, 'preview'])->name('preview');
+});
 
 // Hope Page
 Route::get('/hope/create', [HopeController::class, 'create'])->name('hope.create');

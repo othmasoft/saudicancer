@@ -1,350 +1,237 @@
-@extends('layouts.app2')
+@extends('layouts.app4')
 
-@section('title', 'تفاصيل رسالة الدعم #' . $support->id)
+@section('title', 'اكتب رسالة للمستقبل')
 
 @section('content')
 
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-            {{-- Back Button --}}
-            <div class="mb-3">
-                <a href="{{ route('support.show') }}" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-right me-2"></i>
-                    العودة لقائمة الرسائل
-                </a>
-            </div>
-
-            {{-- Support Message Details Card --}}
-            <div class="card shadow border-0">
-                {{-- Card Header --}}
-                <div class="card-header bg-primary text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            <i class="bi bi-envelope-open-fill me-2"></i>
-                            رسالة الدعم #{{ $support->id }}
-                        </h5>
-                        <div>
-                            <span class="{{ $support->status_label['class'] }} me-2">
-                                {{ $support->status_label['text'] }}
-                            </span>
-                            <span class="{{ $support->priority_label['class'] }}">
-                                {{ $support->priority_label['text'] }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Card Body --}}
-                <div class="card-body p-4">
-
-                    {{-- Message Subject --}}
-                    <div class="mb-4">
-                        <h4 class="text-primary mb-0">{{ $support->subject }}</h4>
-                        <small class="text-muted">
-                            <i class="bi bi-calendar-fill me-1"></i>
-                            تم الإرسال في {{ $support->created_at->format('Y/m/d') }} الساعة {{ $support->created_at->format('H:i') }}
-                            ({{ $support->created_at->diffForHumans() }})
-                        </small>
-                    </div>
-
-                    {{-- Sender Information --}}
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="border rounded p-3 bg-light">
-                                <h6 class="text-muted mb-3">
-                                    <i class="bi bi-person-fill me-2"></i>
-                                    معلومات المرسل
-                                </h6>
-                                <p class="mb-2">
-                                    <strong>الاسم:</strong> {{ $support->name }}
-                                </p>
-                                <p class="mb-2">
-                                    <strong>البريد الإلكتروني:</strong>
-                                    <a href="mailto:{{ $support->email }}">{{ $support->email }}</a>
-                                </p>
-                                @if($support->phone)
-                                    <p class="mb-0">
-                                        <strong>رقم الهاتف:</strong>
-                                        <a href="tel:{{ $support->phone }}">{{ $support->phone }}</a>
-                                    </p>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mt-3 mt-md-0">
-                            <div class="border rounded p-3 bg-light">
-                                <h6 class="text-muted mb-3">
-                                    <i class="bi bi-info-circle-fill me-2"></i>
-                                    معلومات الرسالة
-                                </h6>
-                                <p class="mb-2">
-                                    <strong>الأولوية:</strong>
-                                    <span class="{{ $support->priority_label['class'] }}">
-                                        {{ $support->priority_label['text'] }}
-                                    </span>
-                                </p>
-                                <p class="mb-2">
-                                    <strong>الحالة:</strong>
-                                    <span class="{{ $support->status_label['class'] }}">
-                                        {{ $support->status_label['text'] }}
-                                    </span>
-                                </p>
-                                <p class="mb-0">
-                                    <strong>تاريخ الإنشاء:</strong>
-                                    {{ $support->created_at->format('Y/m/d H:i') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Message Content --}}
-                    <div class="mb-4">
-                        <h6 class="text-muted mb-3">
-                            <i class="bi bi-chat-square-text-fill me-2"></i>
-                            محتوى الرسالة
-                        </h6>
-                        <div class="card bg-light border-0">
-                            <div class="card-body">
-                                <p class="mb-0" style="white-space: pre-wrap; line-height: 1.6;">{{ $support->message }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Admin Response --}}
-                    @if($support->admin_response)
-                        <div class="mb-4">
-                            <h6 class="text-success mb-3">
-                                <i class="bi bi-reply-all-fill me-2"></i>
-                                رد فريق الدعم
-                            </h6>
-                            <div class="alert alert-success border-0">
-                                <div class="d-flex align-items-start">
-                                    <i class="bi bi-person-check-fill text-success me-3 mt-1"></i>
-                                    <div>
-                                        <p class="mb-2" style="white-space: pre-wrap; line-height: 1.6;">{{ $support->admin_response }}</p>
-                                        <small class="text-muted">
-                                            <i class="bi bi-clock me-1"></i>
-                                            تم الرد في {{ $support->responded_at ? $support->responded_at->format('Y/m/d H:i') : 'غير محدد' }}
-                                            @if($support->respondedBy)
-                                                بواسطة {{ $support->respondedBy->name }}
-                                            @endif
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        {{-- No Response Yet --}}
-                        <div class="mb-4">
-                            <div class="alert alert-info border-0">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-hourglass-split text-info me-3"></i>
-                                    <div>
-                                        <h6 class="alert-heading mb-1">في انتظار الرد</h6>
-                                        <p class="mb-0">سيقوم فريق الدعم بالرد على رسالتك في أقرب وقت ممكن.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    {{-- Action Buttons --}}
-                    <div class="d-flex justify-content-center gap-3 pt-3 border-top">
-                        <a href="{{ route('support.show') }}" class="btn btn-outline-primary">
-                            <i class="bi bi-list me-2"></i>
-                            عرض جميع الرسائل
-                        </a>
-
-                        @if($support->status !== 'closed' && $support->status !== 'resolved')
-                            <a href="{{ route('support.create') }}" class="btn btn-success">
-                                <i class="bi bi-plus-circle me-2"></i>
-                                إرسال رسالة جديدة
-                            </a>
-                        @endif
-
-                        <button onclick="window.print()" class="btn btn-outline-secondary">
-                            <i class="bi bi-printer me-2"></i>
-                            طباعة
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            {{-- Timeline Card (if there are updates) --}}
-            @if($support->updated_at != $support->created_at || $support->admin_response)
-                <div class="card mt-4 shadow-sm">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0 text-muted">
-                            <i class="bi bi-clock-history me-2"></i>
-                            تاريخ المراسلة
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="timeline">
-                            {{-- Message Created --}}
-                            <div class="timeline-item">
-                                <div class="timeline-marker bg-primary"></div>
-                                <div class="timeline-content">
-                                    <h6 class="timeline-title">تم إرسال الرسالة</h6>
-                                    <p class="timeline-time text-muted">{{ $support->created_at->format('Y/m/d H:i') }}</p>
-                                </div>
-                            </div>
-
-                            {{-- Admin Response --}}
-                            @if($support->responded_at)
-                                <div class="timeline-item">
-                                    <div class="timeline-marker bg-success"></div>
-                                    <div class="timeline-content">
-                                        <h6 class="timeline-title">تم الرد من فريق الدعم</h6>
-                                        <p class="timeline-time text-muted">{{ $support->responded_at->format('Y/m/d H:i') }}</p>
-                                    </div>
-                                </div>
-                            @endif
-
-                            {{-- Last Update --}}
-                            @if($support->updated_at != $support->created_at)
-                                <div class="timeline-item">
-                                    <div class="timeline-marker bg-info"></div>
-                                    <div class="timeline-content">
-                                        <h6 class="timeline-title">آخر تحديث</h6>
-                                        <p class="timeline-time text-muted">{{ $support->updated_at->format('Y/m/d H:i') }}</p>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
+            {{-- Success/Error Messages --}}
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert" id="flash-message">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="flash-message">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <script>
+                setTimeout(() => {
+                    let alertBox = document.getElementById('flash-message');
+                    if (alertBox) {
+                        // Bootstrap 5 dismiss
+                        let bsAlert = new bootstrap.Alert(alertBox);
+                        bsAlert.close();
+                    }
+                }, 2000);
+            </script>
+
+
+            {{-- General Validation Errors --}}
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        يرجى تصحيح الأخطاء التالية:
+                    </h6>
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            {{-- Page Header --}}
+            <div class="text-center mb-5">
+                <div class="mb-4">
+                    <i class="bi bi-send-fill display-1  "></i>
+                </div>
+                <h1 class="display-5   mb-3">اكتب رسالة للمستقبل</h1>
+                <p class="lead text-muted">
+                    اكتب رسالة لنفسك أو لأحبائك ليستلموها في المستقبل<br>
+                </p>
+            </div>
+
+            {{-- Form Card --}}
+            <div class="card shadow border-0">
+
+                <div class="card-body p-4">
+                    <form action="{{ route('future.store') }}" method="POST" id="futureMessageForm">
+                        @csrf
+
+                        {{-- Email Field --}}
+                        <div class="mb-4">
+                            <label for="email" class="form-label required fw-bold">
+                                <i class="bi bi-envelope-fill text-primary1 me-2"></i>
+                                البريد الإلكتروني
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="email"
+                                   class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                   id="email"
+                                   name="email"
+                                   value="{{ old('email', auth()->user()->email ?? '') }}"
+                                   required>
+                            @error('email')
+                            <div class="invalid-feedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <div class="form-text">
+                                <i class="bi bi-info-circle text-info me-1"></i>
+                                سيتم إرسال الرسالة إلى هذا البريد الإلكتروني في المستقبل
+                            </div>
+                        </div>
+
+                        {{-- Message Field --}}
+                        <div class="mb-4">
+                            <label for="message" class="form-label required fw-bold">
+                                <i class="bi bi-chat-square-heart-fill text-primary1 me-2"></i>
+                                رسالتك للمستقبل
+                                <span class="text-danger">*</span>
+                            </label>
+                            <textarea class="form-control @error('message') is-invalid @enderror"
+                                      id="message"
+                                      name="message"
+                                      rows="8"
+                                      placeholder="اكتب رسالتك هنا... شارك أحلامك، أهدافك، أو كلمات تشجيعية لنفسك أو لأحبائك.
+
+مثال:
+عزيزي أنا المستقبل،
+أتمنى أن تكون قد حققت أهدافك التي وضعتها اليوم...
+أتمنى أن تكون أقوى وأسعد...
+
+مع كل الحب، أنا من الماضي ❤️"
+                                      required>{{ old('message') }}</textarea>
+                            @error('message')
+                            <div class="invalid-feedback">
+                                <i class="bi bi-exclamation-circle me-1"></i>
+                                {{ $message }}
+                            </div>
+                            @enderror
+                            <div class="form-text">
+                                <i class="bi bi-lightbulb text-warning me-1"></i>
+                                نصيحة: اكتب بصدق واجعل الرسالة مليئة بالأمل والإيجابية
+                            </div>
+                        </div>
+
+                        {{-- Hidden Fields with Default Values --}}
+                        <input type="hidden" name="title" value="رسالة من الماضي">
+                        <input type="hidden" name="recipient_name" value="صديقي العزيز">
+                        <input type="hidden" name="message_type" value="personal">
+                        <input type="hidden" name="scheduled_date" value="{{ date('Y-m-d', strtotime('+1 year')) }}">
+                        <input type="hidden" name="scheduled_time" value="09:00">
+                        <input type="hidden" name="send_email" value="1">
+                        <input type="hidden" name="is_public" value="0">
+
+                        {{-- Action Buttons --}}
+                        <div class="d-flex justify-content-center gap-3 pt-4 border-top">
+
+                            <button type="submit" class="btn btn-success1 btn-lg px-5">
+                                <i class="bi bi-send-fill me-2"></i>
+                                إرسال الرسالة للمستقبل
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {{-- Info Cards --}}
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light-custom h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-calendar-heart text-primary1 mb-2" style="font-size: 2rem;"></i>
+                            <h6 class="text-primary1">متى ستصل؟</h6>
+                            <small class="text-muted">
+                                ستصل رسالتك بعد سنة كاملة من اليوم
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3 mt-md-0">
+                    <div class="card border-0 bg-light-custom h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shield-check text-success mb-2" style="font-size: 2rem;"></i>
+                            <h6 class="text-primary1">أمان تام</h6>
+                            <small class="text-muted">
+                                رسالتك محفوظة بأمان ولن يراها أحد غيرك
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3 mt-md-0">
+                    <div class="card border-0 bg-light-custom h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-heart-fill text-danger mb-2" style="font-size: 2rem;"></i>
+                            <h6 class="text-primary1">رسالة أمل</h6>
+                            <small class="text-muted">
+                                مفاجأة جميلة ستذكرك بأحلامك وآمالك
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Examples Card --}}
         </div>
     </div>
 
-    {{-- Custom CSS with your color palette --}}
-    <style>
-        :root {
-            --color-primary: #2a6571;
-            --color-secondary: #dcdde6;
-            --color-accent: #866eaf;
-            --color-light: #6a99cb;
-        }
 
-        .text-primary { color: var(--color-primary) !important; }
-        .bg-primary { background-color: var(--color-primary) !important; }
-        .bg-light { background-color: var(--color-secondary) !important; }
 
-        .btn-success {
-            background-color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
+    {{-- JavaScript for Preview --}}
+    <script>
+        function previewMessage() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const recipientName = document.getElementById('recipient_name').value;
 
-        .btn-success:hover {
-            background-color: #7059a3;
-            border-color: #7059a3;
-        }
-
-        .btn-outline-primary {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
-
-        .btn-outline-primary:hover {
-            background-color: var(--color-primary);
-            border-color: var(--color-primary);
-            color: white;
-        }
-
-        .btn-outline-secondary {
-            color: var(--color-primary);
-            border-color: var(--color-secondary);
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: var(--color-secondary);
-            border-color: var(--color-secondary);
-            color: var(--color-primary);
-        }
-
-        .alert-success {
-            background-color: rgba(134, 110, 175, 0.1);
-            border-color: var(--color-accent);
-            color: var(--color-primary);
-        }
-
-        .alert-info {
-            background-color: rgba(106, 153, 203, 0.1);
-            border-color: var(--color-light);
-            color: var(--color-primary);
-        }
-
-        .text-success {
-            color: var(--color-accent) !important;
-        }
-
-        .text-info {
-            color: var(--color-light) !important;
-        }
-
-        /* Timeline Styles */
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: var(--color-secondary);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .timeline-marker {
-            position: absolute;
-            left: -23px;
-            top: 5px;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .timeline-content {
-            padding-left: 15px;
-        }
-
-        .timeline-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-            color: var(--color-primary);
-        }
-
-        .timeline-time {
-            font-size: 0.8rem;
-            margin-bottom: 0;
-        }
-
-        /* Print Styles */
-        @media print {
-            .btn, .border-top {
-                display: none !important;
+            if (!title || !content) {
+                alert('يرجى ملء العنوان والرسالة أولاً');
+                return;
             }
 
-            .card {
-                border: 1px solid #ddd !important;
-                box-shadow: none !important;
-            }
+            // يمكن فتح نافذة معاينة أو إظهار modal
+            const previewWindow = window.open('', '_blank', 'width=600,height=400');
+            previewWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>معاينة الرسالة</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+                        .header { border-bottom: 2px solid #2a6571; padding-bottom: 10px; margin-bottom: 20px; }
+                        .content { white-space: pre-wrap; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>${title}</h2>
+                        <p>إلى: ${recipientName || 'صديقي العزيز'}</p>
+                    </div>
+                    <div class="content">${content}</div>
+                </body>
+                </html>
+            `);
         }
-    </style>
+
+        // Set minimum date to tomorrow
+        document.addEventListener('DOMContentLoaded', function() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+            document.getElementById('scheduled_date').setAttribute('min', minDate);
+        });
+    </script>
 
 @endsection
