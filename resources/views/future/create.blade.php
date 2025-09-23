@@ -53,14 +53,17 @@
             @endif
 
             {{-- Page Header --}}
-            <div class="text-center mb-5">
+            <div class="text-center mb-5" style="position: relative" >
                 <div class="mb-4">
                     <i class="bi bi-send-fill display-1  "></i>
                 </div>
                 <h1 class="display-5   mb-3">اكتب رسالة للمستقبل</h1>
                 <p class="lead text-muted">
-                    اكتب رسالة لنفسك أو لأحبائك ليستلموها في المستقبل<br>
+                    اكتب رسالة لنفسك في المستقبل<br>
                 </p>
+
+                <img src="{{ asset('storage/east.png') }}" class="east-img" />
+                <img src="{{ asset('storage/logo.png') }}" class="logo-img" />
             </div>
 
             {{-- Form Card --}}
@@ -189,7 +192,6 @@
     </div>
 
 
-
     {{-- JavaScript for Preview --}}
     <script>
         function previewMessage() {
@@ -233,5 +235,23 @@
             document.getElementById('scheduled_date').setAttribute('min', minDate);
         });
     </script>
+<style>
 
+    .east-img {
+        top: 60%;
+        right:0%;
+        transform: translateY(-50%);
+        position: absolute;
+        max-width: 15vw; /* متجاوب حسب العرض */
+        height: auto;
+    }
+
+    .logo-img {
+        top: 30%;
+        left: -3%;
+        position: absolute;
+        max-width: 20vw; /* متجاوب حسب العرض */
+        height: auto;
+    }
+</style>
 @endsection
