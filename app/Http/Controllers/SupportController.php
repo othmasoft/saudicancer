@@ -77,18 +77,28 @@ class SupportController extends Controller
 
     public function show(Request $request)
     {
+        $prince_word = Support::orderBy('id', 'asc')->first()->message;
+        $words = explode(" ", $prince_word);
+        $prince_word = implode(" ", array_slice($words, 0, 11));
+
         if ($request->ajax()) {
             $count = Support::count();
-            $lastMessage = Support::orderBy('id', 'desc')->first();
+
+            $lastMessage = Support::where('id', '!=', 1)
+                ->orderBy('id', 'desc')
+                ->first();
 
             return response()->json([
+                'id'   => $lastMessage->id,
                 'count'   => $count,
                 'message' => $lastMessage ? trim($lastMessage->message) : null
             ]);
         }
 
-        $supports = Support::take(20)->get();
-        return view('support.show', compact('supports'));
+        $supports = Support::where('id', '!=', 1)->take(20)->get();
+
+        //$supports = [];
+        return view('support.show', compact('supports','prince_word'));
     }
 
 

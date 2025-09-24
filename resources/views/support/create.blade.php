@@ -6,12 +6,16 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
+
             {{-- Page Header --}}
-            <div class="text-center mb-4">
+            <div class="text-center mb-4" style="position: relative; height: 40%">
                 <h1 class="display-6     mb-3">
                     <i class="bi bi-plus-circle"></i>
                     أكـتـب رسـالة الدعـم
                 </h1>
+
+                <img src="{{ asset('storage/east.png') }}" class="east-img" />
+                <img src="{{ asset('storage/logo.png') }}" class="logo-img" />
             </div>
 
             {{-- Flash Messages --}}
@@ -83,24 +87,29 @@
                         </div>
 -->
                         {{-- Message Field --}}
-                        <div class="mb-4">
-                            <label for="message" class="form-label required">
-                                <i class="bi bi-file-text-fill text-primary me-1"></i>
-                                نص الرسالة
-                            </label>
-                            <textarea class="form-control @error('message') is-invalid @enderror"
-                                      id="message"
-                                      name="message"
-                                      rows="3"
-                                      placeholder="أكتب رسالة دعم هنا ..."
-                                      required>{{ old('message') }}</textarea>
-                            <div class="form-text"> من 10 الى 40 حرف</div>
-                            @error('message')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                                <div class="mb-4">
+                                    <label for="message" class="form-label required">
+                                        <i class="bi bi-file-text-fill text-primary me-1"></i>
+                                        نص الرسالة
+                                    </label>
+                                    <input type="text"
+                                           value="{{old('message')}}"
+                                           class="form-control @error('message') is-invalid @enderror"
+                                           id="message"
+                                           name="message"
+                                           placeholder="أكتب رسالة دعم هنا ..."
+                                           minlength="10"
+                                           maxlength="40"
+                                           required
+                                           onkeydown="if(event.key==='Enter'){event.preventDefault(); this.form.submit();}">
+                                    <div class="form-text">من 10 إلى 40 حرف</div>
+                                    @error('message')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                        {{-- Submit Buttons --}}
+
+                                {{-- Submit Buttons --}}
                         <div class="d-grid gap-2 d-md-flex justify-content-center">
                             <button type="submit" class="btn btn-success btn-lg">
                                 <i class="bi bi-send-fill me-2"></i>
@@ -120,6 +129,7 @@
                 document.querySelectorAll('.auto-hide').forEach(el => {
                     el.classList.remove('show'); // Bootstrap fade out
                     setTimeout(() => el.remove(), 500); // يمسحه بعد ما يختفي
+                    document.getElementById("message").focus();
                 });
             }, 1000); // 1 ثانية
         });
@@ -131,6 +141,10 @@
         .required::after {
             content: " *";
             color: #dc3545;
+        }
+
+        input#message{
+            min-height: 60px;
         }
 
         .form-control:focus, .form-select:focus {
@@ -147,5 +161,23 @@
             background-color: #7059a3;
             border-color: #7059a3;
         }
+
+        .east-img {
+            top: 50%;
+            right:0%;
+            transform: translateY(-50%);
+            position: absolute;
+            max-width: 10vw; /* متجاوب حسب العرض */
+            height: auto;
+        }
+
+        .logo-img {
+            top: 10%;
+            left: -3%;
+            position: absolute;
+            max-width: 15vw; /* متجاوب حسب العرض */
+            height: auto;
+        }
+
     </style>
 @endsection
