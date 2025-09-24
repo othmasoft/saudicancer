@@ -20,7 +20,7 @@
                 </div>
 
                 {{-- إضافة رسالة دعم --}}
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0 hover-card">
                         <div class="card-body text-center p-3">
                             <div class="icon-circle bg-success mb-3">
@@ -28,7 +28,6 @@
                             </div>
                             <h5 class="card-title text-success mb-3">إنشاء رسالة دعم</h5>
                             <p class="card-text text-muted mb-4">
-                                تواصل معنا إذا كانت لديك مشكلة أو استفسار
                             </p>
                             <a href="{{ route('support.create') }}" class="btn btn-success btn-lg w-100">
                                 <i class="bi bi-envelope-plus me-2"></i>
@@ -37,9 +36,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0 hover-card">
+                        <div class="card-body text-center p-3">
+                            <div class="icon-circle bg-primary mb-3">
+                                <i class="bi bi-plus-circle-fill text-white"></i>
+                            </div>
+                            <h5 class="card-title text-success mb-3"> رسالة الامير</h5>
+                            <p class="card-text text-muted mb-4">
+                            </p>
+                            <a href="{{ route('support.prince') }}" class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-envelope-plus me-2"></i>
+                                إنشاء رسالة جديدة
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
                 {{-- عرض رسائل الدعم --}}
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0 hover-card">
                         <div class="card-body text-center p-3">
                             <div class="icon-circle bg-info mb-3">
@@ -47,7 +62,6 @@
                             </div>
                             <h5 class="card-title text-info mb-3">متابعة الرسائل</h5>
                             <p class="card-text text-muted mb-4">
-                                تابع حالة رسائلك واطلع على الردود
                             </p>
                             <a href="{{ route('support.show') }}" class="btn btn-info btn-lg w-100">
                                 <i class="bi bi-list-check me-2"></i>

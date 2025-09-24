@@ -26,6 +26,14 @@ class SupportController extends Controller
     }
 
     /**
+     * Show the form for creating a new support message
+     */
+    public function prince()
+    {
+        return view('support.prince');
+    }
+
+    /**
      * Store a newly created support message in storage
      */
     public function store(Request $request)
@@ -53,19 +61,37 @@ class SupportController extends Controller
                 ->withInput();
         }
 
-        try {
-            $m = Support::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'subject' => $request->subject,
-                'message' => $request->message,
-                'status' => 'open',
-                'user_id' => Auth::id(), // if user is logged in
-            ]);
 
-            return redirect()->route('support.create')
-                ->with('success', __('app.support_message_sent_successfully'));
+
+        try {
+            if($request->is_prince){
+                Support::where('id', 1)->update([
+                    'name'    => $request->name,
+                    'email'   => $request->email,
+                    'phone'   => $request->phone,
+                    'subject' => $request->subject,
+                    'message' => $request->message,
+                    'status'  => 'open',
+                    'user_id' => Auth::id(),
+                ]);
+                return redirect()->route('support.prince')
+                    ->with('success', __('app.support_message_sent_successfully'));
+            }else{
+                $m = Support::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'subject' => $request->subject,
+                    'message' => $request->message,
+                    'status' => 'open',
+                    'user_id' => Auth::id(), // if user is logged in
+                ]);
+                return redirect()->route('support.create')
+                    ->with('success', __('app.support_message_sent_successfully'));
+            }
+
+
+
 
         } catch (\Exception $e) {
             return redirect()->back()
@@ -82,8 +108,12 @@ class SupportController extends Controller
         $prince_word = implode(" ", array_slice($words, 0, 11));
 
         if ($request->ajax()) {
-            $count = Support::count();
 
+            $prince_word = Support::orderBy('id', 'asc')->first()->message;
+            $words = explode(" ", $prince_word);
+            $prince_word = implode(" ", array_slice($words, 0, 11));
+
+            $count = Support::count();
             $lastMessage = Support::where('id', '!=', 1)
                 ->orderBy('id', 'desc')
                 ->first();
@@ -91,7 +121,8 @@ class SupportController extends Controller
             return response()->json([
                 'id'   => $lastMessage->id,
                 'count'   => $count,
-                'message' => $lastMessage ? trim($lastMessage->message) : null
+                'message' => $lastMessage ? trim($lastMessage->message) : null,
+                'prince_word' => $prince_word ? trim($prince_word) : null
             ]);
         }
 

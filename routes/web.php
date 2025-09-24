@@ -49,6 +49,7 @@ Route::prefix('questions')->name('questions.')->group(function () {
 // Support Page
 Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
+Route::get('/support/prince', [SupportController::class, 'prince'])->name('support.prince');
 Route::post('/support', [SupportController::class, 'store'])->name('support.store');
 Route::get('/support/show', [SupportController::class, 'show'])->name('support.show');
 Route::get('/support/{id}', [SupportController::class, 'view'])->name('support.view');

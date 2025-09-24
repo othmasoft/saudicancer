@@ -140,7 +140,7 @@
 
 
         @for($i = 1; $i <= 27; $i++)
-            <div class="box box{{ $i }}">{{$i}}</div>
+            <div class="box box{{ $i }}"></div>
         @endfor
     </div>
 
@@ -161,7 +161,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $( document ).ready(function() {
-           // $(".box").hide();
+            $(".box").hide();
         });
 
         let currentIndex = 1;  // نبدأ من box1
@@ -172,6 +172,8 @@
         function fetchMessages() {
             $.get("{{ route('support.show') }}", (data) => {
                 if (data && data.message) {
+                    $('.prince-text').html(data.prince_word);
+
                     let message = data.message.trim();
 
                     // نتأكد أنها رسالة جديدة (بالمقارنة مع الـ id مثلاً)
