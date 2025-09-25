@@ -11,6 +11,13 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('route:cache');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    return 'Application cache has been cleared';
+});
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,8 +34,13 @@ Route::prefix('future')->name('future.')->group(function () {
 
 // Hope Page
 Route::get('/hope/show', [HopeController::class, 'show'])->name('hope.show');
+Route::get('/hope/hands', [HopeController::class, 'hands'])->name('hope.hands');
 Route::post('/hope/add-hand', function (\Illuminate\Http\Request $request) {
-    event(new \App\Events\NewHandAdded($request->hand ?? '🖐️'));
+    //event(new \App\Events\NewHandAdded($request->hand ?? '🖐️'));
+
+    $hands = \App\Models\User::findOrFail(1);
+    // Increment the views count
+    $hands->increment('hands');
     return response()->json(['status' => 'sent']);
 });
 

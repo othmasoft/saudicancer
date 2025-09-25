@@ -55,13 +55,15 @@
 </head>
 <body>
 
+{{-- JavaScript --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
 {{-- المحتوى --}}
 <main class="container mt-4">
     @yield('content')
 </main>
 
-{{-- JavaScript --}}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

@@ -85,14 +85,19 @@
     <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.0/dist/echo.iife.js"></script>
 
     <script>
+
         // إعداد Echo مع Pusher
-        window.Pusher = Pusher;
-        window.Echo = new Echo({
-            broadcaster: "pusher",
-            key: "{{ env('PUSHER_APP_KEY') }}",
-            cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
-            forceTLS: true
-        });
+        //window.Pusher = Pusher;
+        //window.Echo = new Echo({
+           // broadcaster: "pusher",
+           // key: "{{ env('PUSHER_APP_KEY') }}",
+           // cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+           // wsHost: 'ws-' + '{{ env("PUSHER_APP_CLUSTER") }}' + '.pusher.com',
+            //wsPort: 443,
+            //wssPort: 443,
+           // forceTLS: true,
+           // enabledTransports: ['ws', 'wss'], // امنع sockjs/xhr_streaming
+        //});
 
         let hands = [];
         const maxHands = 41; // 20 صغير + 20 كبير + اليد 41
@@ -161,7 +166,39 @@
             });
         });
 
+        var hands_counts = 0;
+        var last_hands = 0;
+
+
+        // إرسال Ajax للـ Laravel → يولد event عبر Pusher
+        $(document).ready(function() {
+            // Define the function that sends the AJAX request
+            function sendAjaxRequest() {
+                $.ajax({
+                    url: '{{ url('/hope/hands') }}', // Replace with your server-side script URL
+                    type: 'GET', // Or 'POST', depending on your needs
+                    dataType: 'json', // Expected data type from the server
+                    success: function(response) {
+                      hands_counts = response.count;
+                      //console.log(hands_counts);
+                      if(hands_counts > last_hands){
+                          deaw_hand(hands);
+                      }
+                      last_hands = hands_counts;
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle any errors that occur during the request
+                        console.error('AJAX request failed:', status, error);
+                    }
+                });
+            }
+
+            // Set the interval to call sendAjaxRequest every 1000 milliseconds (1 second)
+            setInterval(sendAjaxRequest, 1000);
+        });
+
         // الاستماع للقناة
+      /*
         window.Echo.channel("hope-channel")
             .listen(".new-hand", (data) => {
                 const container = document.getElementById("container");
@@ -201,11 +238,50 @@
                     hands.push(handEl);
                 }
             });
+
+        */
+
+        function deaw_hand(hands){
+            const container = document.getElementById("container");
+
+            if (hands.length < maxHands) {
+                const handEl = document.createElement("img");
+                handEl.src = "{{ asset('storage/hand.png') }}";
+                handEl.className = "hand";
+                handEl.dataset.index = hands.length;
+
+                const pos = positions[hands.length];
+                handEl.style.position = "absolute";
+                handEl.style.left = pos.x + "px";
+                handEl.style.top = pos.y + "px";
+
+                container.appendChild(handEl);
+                hands.push(handEl);
+            } else {
+                const oldHand = hands.find(h => h.dataset.index == maxHands - 1);
+                if (oldHand) {
+                    oldHand.classList.add("fade-out");
+                    setTimeout(() => oldHand.remove(), 500);
+                    hands = hands.filter(h => h !== oldHand);
+                }
+
+                const handEl = document.createElement("img");
+                handEl.src = "{{ asset('storage/hand.png') }}";
+                handEl.className = "hand";
+                handEl.dataset.index = maxHands - 1;
+
+                const pos = positions[maxHands - 1];
+                handEl.style.position = "absolute";
+                handEl.style.left = pos.x + "px";
+                handEl.style.top = pos.y + "px";
+
+                container.appendChild(handEl);
+                hands.push(handEl);
+            }
+
+            calculatePositions();
+        }
     </script>
-
-
-
-
 
 
 @endsection
