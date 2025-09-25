@@ -9,7 +9,7 @@
             padding: 0;
             height: 100vh;
             width: 100vw;
-            background-color: #fcf5f2; /* لون خلفية للفراغات */
+            background-color: white;; /* لون خلفية للفراغات */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,6 +45,7 @@
             border: 1px solid #8e2151; /* إطار أحمر */
             border-radius: 15px;
             overflow: hidden;
+            z-index: 12;
         }
 
         /* مثال لمواضع */
@@ -100,7 +101,12 @@
 
         <style>
             .prince-word-container {
-                text-align: center; /* كل النص في المنتصف */
+                position: fixed;
+                top: 15%;
+                left: 50%;
+                transform: translate(-50%, -50%); /* يوسّط العنصر في النص */
+                text-align: center;
+                z-index: 10;
             }
 
             .signature {
@@ -124,7 +130,7 @@
 
             .prince-text {
                 color: #8e2151; /* النص أحمر */
-                max-width: 70%;
+                max-width: 90%;
                 line-height: 1.6;
                 padding: 10px 18px;
                 border: 2px solid #8e2151; /* إطار أحمر */
@@ -144,6 +150,34 @@
         @endfor
     </div>
 
+    <!-- Overlay -->
+    <div id="overlay" class="overlay active"></div>
+    <style>
+        .overlay {
+            position: fixed;
+            left: 0;
+            bottom: -100%; /* خارج الشاشة */
+            width: 100%;
+            height: 100%;
+            background: white; /* خلفية غامقة */
+            transition: bottom 3s ease-in-out; /* الحركة بطيئة (2 ثانية) */
+            z-index: 9;
+        }
+
+        .overlay.active {
+            bottom: 0; /* يظهر ويغطي الشاشة */
+        }
+    </style>
+    <script>
+        function hideOverlay() {
+            document.getElementById("overlay").classList.remove("active");
+        }
+        function showOverlay() {
+            document.getElementById("overlay").classList.add("active");
+        }
+    </script>
+
+ <!--
     <div id="mouse-pos"
          style="position: fixed;
             top: 10px;
@@ -157,7 +191,7 @@
             z-index: 9999;">
         X: 0% , Y: 0%
     </div>
-
+-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $( document ).ready(function() {
@@ -186,11 +220,22 @@
                             $(".box").hide();
                             $(".box1").show();
                             currentIndex = 1;   // نرجع للبداية
+                            showOverlay();
+                        }
+
+                        if (currentIndex == totalBoxes) {
+                            hideOverlay();
                         }
 
                         // نضيف الرسالة في الصندوق الحالي
                         $(`.box${currentIndex}`).show();
                         $(`.box${currentIndex}`).html(message.substring(0, 40));
+                        // نضيف كلاس الوميض
+                        let box = $(`.box${currentIndex}`);
+                        box.addClass("flash");
+
+                        // بعد ثانية نشيله عشان ممكن يتكرر بعدين
+                        setTimeout(() => box.removeClass("flash"), 1000);
 
                         currentIndex++;
                     }
@@ -219,4 +264,17 @@
                 "X: " + percentX.toFixed(2) + "% , Y: " + percentY.toFixed(2) + "%";
         });
     </script>
+
+    <style>
+        /* كلاس للوميض */
+        .flash {
+            animation: flashBg 1s ease;
+        }
+
+        @keyframes flashBg {
+            0%   { background-color: yellow; }
+            50%  { background-color: white; }
+            100% { background-color: inherit; }
+        }
+    </style>
 @endsection
