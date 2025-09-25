@@ -108,7 +108,7 @@
             const baseScale = Math.min(window.innerWidth, window.innerHeight) / 40;
 
             // 🔹 القلب الصغير (20 كف)
-            const smallScale = baseScale * 0.9;
+            const smallScale = baseScale * 1;
             for (let i = 0; i < 20; i++) {
                 const t = Math.PI - (i / 20) * 2 * Math.PI;
                 const x = 16 * Math.pow(Math.sin(t), 3);
@@ -120,9 +120,14 @@
                 });
             }
 
-            // 🔹 القلب الكبير (20 كف) — أكبر من الصغير بوضوح
-            const bigScale = baseScale * 1.5; // كبرنا الفارق
-            const offsetBigY = -baseScale * 3; // رفعناه لفوق شوية
+            // 🔹 القلب الكبير — خلي الفرق بسيط
+            // خلي القلب الكبير أوسع + نزود فرق مسافة منتظم
+            const spacing = baseScale * 4; // 🔹 المسافة بين القلبين
+            const bigScale = smallScale * 1.3;
+            const offsetBigY = -baseScale * 0.5; // نخليه في نفس المركز العمودي
+
+            //const bigScale = baseScale * 1.3;   // كان 1.5 → صغّرنا
+            //const offsetBigY = -baseScale * 1;  // كان -3 → قربنا لتحت
             for (let i = 0; i < 20; i++) {
                 const t = Math.PI - (i / 20) * 2 * Math.PI;
                 const x = 16 * Math.pow(Math.sin(t), 3);
@@ -136,8 +141,8 @@
 
             // 🔹 اليد رقم 41 (على يمين القلب الكبير)
             positions.push({
-                x: centerX + bigScale * 12,  // يمين القلب الكبير
-                y: centerY + bigScale * 1  // Slight down
+                x: centerX + bigScale * 10,  // يمين القلب الكبير
+                y: centerY + bigScale * 4  // Slight down
             });
         }
 
