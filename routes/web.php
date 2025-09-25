@@ -8,11 +8,14 @@ use App\Http\Controllers\GiftController;
 use App\Http\Controllers\FutureController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
-    // Future Page
-    Route::prefix('future')->name('future.')->group(function () {
+// Future Page
+Route::prefix('future')->name('future.')->group(function () {
     Route::get('/', [FutureController::class, 'index'])->name('index');
     Route::get('/show', [FutureController::class, 'show'])->name('show');
     Route::get('/create', [FutureController::class, 'create'])->name('create');
@@ -23,7 +26,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 });
 
 // Hope Page
-Route::get('/hope/create', [HopeController::class, 'create'])->name('hope.create');
 Route::get('/hope/show', [HopeController::class, 'show'])->name('hope.show');
 Route::post('/hope/add-hand', function (\Illuminate\Http\Request $request) {
     event(new \App\Events\NewHandAdded($request->hand ?? '🖐️'));
@@ -47,25 +49,47 @@ Route::prefix('questions')->name('questions.')->group(function () {
 });
 
 // Support Page
-Route::get('/support', [SupportController::class, 'index'])->name('support.index');
-Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
-Route::get('/support/prince', [SupportController::class, 'prince'])->name('support.prince');
-Route::post('/support', [SupportController::class, 'store'])->name('support.store');
+//Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 Route::get('/support/show', [SupportController::class, 'show'])->name('support.show');
-Route::get('/support/{id}', [SupportController::class, 'view'])->name('support.view');
-Route::post('/support/search', [SupportController::class, 'searchByEmail'])->name('support.search');
+//Route::post('/support/search', [SupportController::class, 'searchByEmail'])->name('support.search');
 
 
 
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+
+Route::group(['namespace' => 'Auth'], function () {
+
+    // Login Routes
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    // Registration Routes
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    //Route::post('/register', [RegisterController::class, 'register']);
+
+});
 
 // Admin routes (protected by auth and admin middleware)
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');
-    Route::patch('/admin/support/{id}/status', [SupportController::class, 'updateStatus'])->name('admin.support.status');
-    Route::post('/admin/support/{id}/response', [SupportController::class, 'addResponse'])->name('admin.support.response');
-    Route::delete('/admin/support/{id}', [SupportController::class, 'destroy'])->name('admin.support.delete');
-    Route::get('/admin/support/stats', [SupportController::class, 'getStats'])->name('admin.support.stats');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
+    Route::get('/support/prince', [SupportController::class, 'prince'])->name('support.prince');
+    Route::post('/support', [SupportController::class, 'store'])->name('support.store');
+
+    Route::get('/hope/create', [HopeController::class, 'create'])->name('hope.create');
+
+
+//    Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');
+//    Route::patch('/admin/support/{id}/status', [SupportController::class, 'updateStatus'])->name('admin.support.status');
+//    Route::post('/admin/support/{id}/response', [SupportController::class, 'addResponse'])->name('admin.support.response');
+//    Route::delete('/admin/support/{id}', [SupportController::class, 'destroy'])->name('admin.support.delete');
+//    Route::get('/admin/support/stats', [SupportController::class, 'getStats'])->name('admin.support.stats');
 });
+
+//User::create([
+//    'name' => 'Admin',
+//    'email' => 'admin@saudicancerfoundation.com',
+//    'password' => bcrypt('admin1020'), // لازم تستخدم bcrypt
+//]);
 
 // Products Resource
 //Route::resource('products', ProductController::class);
