@@ -194,7 +194,7 @@
             }
 
             // Set the interval to call sendAjaxRequest every 1000 milliseconds (1 second)
-            setInterval(sendAjaxRequest, 1000);
+            setInterval(sendAjaxRequest, 2000);
         });
 
         // الاستماع للقناة

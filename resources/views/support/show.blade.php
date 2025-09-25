@@ -244,7 +244,7 @@
         }
 
         // استدعاء كل ثانية
-        setInterval(fetchMessages, 1000);
+        setInterval(fetchMessages, 2000);
     </script>
 
 
