@@ -88,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/support', [SupportController::class, 'store'])->name('support.store');
 
     Route::get('/hope/create', [HopeController::class, 'create'])->name('hope.create');
+    Route::get('/hope/create2', [HopeController::class, 'create2'])->name('hope.create2');
 
 
 //    Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');

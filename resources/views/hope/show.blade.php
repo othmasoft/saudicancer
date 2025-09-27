@@ -73,6 +73,13 @@
             to { opacity: 0; transform: scale(0); }
         }
 
+        img.hand[data-index="0"] {
+            display: none;
+        }
+
+        img.hand[data-index="1"] {
+            display: none;
+        }
         img.hand[data-index="16"] {
             display: none;
         }
@@ -110,6 +117,8 @@
             const centerY = window.innerHeight / 2;
             const baseScale = Math.min(window.innerWidth, window.innerHeight) / 35;
 
+            let Extra_x = 0;
+
             for (let i = 0; i < maxHands; i++) {
                 const t = (i / maxHands) * 2 * Math.PI; // يبدأ من فوق
                 const x = 16 * Math.pow(Math.sin(t), 3);
@@ -119,8 +128,10 @@
                     2 * Math.cos(3 * t) -
                     Math.cos(4 * t);
 
+                //End Extra X
+
                 positions.push({
-                    x: centerX + x * baseScale,
+                    x: centerX + x * baseScale * 1.2,
                     y: centerY - y * baseScale,
                 });
             }
@@ -169,9 +180,25 @@
         });
 
         function drawInitialHands() {
-            // لو عايز تضيف يدين في البداية بشكل يدوي ممكن هنا
-            last_hands = 0;
-            hands_counts = 0;
+            const container = document.getElementById("container");
+
+            for (let i = 0; i < 2; i++) { // الكفين الأول والتاني
+                const handEl = document.createElement("img");
+                handEl.src = "{{ asset('storage/hand.png') }}";
+                handEl.className = "hand";
+                handEl.dataset.index = i;
+
+                const pos = positions[i];
+                handEl.style.left = pos.x + "px";
+                handEl.style.top = pos.y + "px";
+
+                container.appendChild(handEl);
+                hands.push(handEl);
+            }
+
+            // نحدث العدادات
+            hands_counts = 2;
+            last_hands = 2;
         }
 
         function drawHand() {
@@ -182,9 +209,9 @@
                 let nextIndex = hands.length;
 
                 // نتخطى أي index في skipIndexes
-                while (skipIndexes.includes(nextIndex) && nextIndex < maxHands) {
-                    nextIndex++;
-                }
+                // while (skipIndexes.includes(nextIndex) && nextIndex < maxHands) {
+                //     nextIndex++;
+                // }
 
                 if (nextIndex >= maxHands) return;
 
@@ -199,6 +226,11 @@
 
                 container.appendChild(handEl);
                 hands.push(handEl);
+
+                if(hands.length == 15){
+                    drawHand();
+                    drawHand();
+                }
             } else {
                 // 🔹 بعد ما اكتمل القلب (30 كف)
                 // نشيل آخر كف ونضيفه من جديد
@@ -217,6 +249,8 @@
                 const pos = positions[lastIndex];
                 newHand.style.left = pos.x + "px";
                 newHand.style.top = pos.y + "px";
+
+
 
                 container.appendChild(newHand);
                 hands.push(newHand);

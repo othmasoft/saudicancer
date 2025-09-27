@@ -13,6 +13,10 @@ class HopeController extends Controller
     {
         return view('hope.create');
     }
+    public function create2()
+    {
+        return view('hope.create2');
+    }
 
     public function hands()
     {
