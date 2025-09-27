@@ -62,7 +62,7 @@
         function showHand() {
             area.innerHTML = `
         <div class="hand">
-            <img src="{{ asset('storage/hand.png') }}" />
+            <img src="{{ asset('storage/right_hand.png') }}" />
         </div>
     `;
             setTimeout(() => {

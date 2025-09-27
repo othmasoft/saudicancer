@@ -9,7 +9,7 @@
             <div class="text-center mb-4" style="position: relative; height: 40%">
                 <h1 class="display-6     mb-3">
                     <i class="bi bi-plus-circle"></i>
-                    أكـتـب رسـالة الأمير
+                     رسـالة سمو الأمير
                 </h1>
 
                 <img src="{{ asset('storage/east.png') }}" class="east-img" />
@@ -98,10 +98,10 @@
                                            name="message"
                                            placeholder="أكتب رسالة دعم هنا ..."
                                            minlength="10"
-                                           maxlength="40"
+                                           maxlength="50"
                                            required
                                            onkeydown="if(event.key==='Enter'){event.preventDefault(); this.form.submit();}">
-                                    <div class="form-text">من 10 إلى 40 حرف</div>
+                                    <div class="form-text">من 10 إلى 50 حرف</div>
                                     @error('message')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

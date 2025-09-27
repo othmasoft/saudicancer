@@ -42,6 +42,7 @@
             font-display: swap;
         }
         body {
+            font-family: "Almarai", "Arial", sans-serif;
             margin: 0;
             padding: 0;
             height: 100vh;

@@ -84,7 +84,7 @@
                                    class="form-control form-control-lg @error('email') is-invalid @enderror"
                                    id="email"
                                    name="email"
-                                   value="{{ old('email', auth()->user()->email ?? '') }}"
+                                   value="{{ old('email', '') }}"
                                    required>
                             @error('email')
                             <div class="invalid-feedback">
@@ -191,7 +191,6 @@
         </div>
     </div>
 
-
     {{-- JavaScript for Preview --}}
     <script>
         function previewMessage() {
@@ -239,18 +238,18 @@
 
     .east-img {
         top: 60%;
-        right:0%;
+        right:-1%;
         transform: translateY(-50%);
         position: absolute;
-        max-width: 15vw; /* متجاوب حسب العرض */
+        max-width: 12vw; /* متجاوب حسب العرض */
         height: auto;
     }
 
     .logo-img {
-        top: 30%;
+        top: 40%;
         left: -3%;
         position: absolute;
-        max-width: 20vw; /* متجاوب حسب العرض */
+        max-width: 18vw; /* متجاوب حسب العرض */
         height: auto;
     }
 </style>

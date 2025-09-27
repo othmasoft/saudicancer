@@ -129,19 +129,18 @@
             }
 
             .prince-text {
-                color: #8e2151; /* النص أحمر */
+                color: #fff; /* النص أحمر */
                 max-width: 90%;
                 line-height: 1.6;
                 padding: 10px 18px;
                 border: 2px solid #8e2151; /* إطار أحمر */
                 border-radius: 10px;
-                background-color: #fff; /* خلفية بيضاء */
+                background-color: #8e2151; /* خلفية بيضاء */
                 display: inline-block;
             }
 
 
         </style>
-
 
 
 

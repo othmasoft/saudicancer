@@ -44,7 +44,7 @@ class SupportController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'subject' => 'nullable|string|max:255',
-            'message' => 'required|string|min:10|max:40',
+            'message' => 'required|string|min:10|max:50',
         ], [
             'name.string' => 'الاسم يجب أن يكون نص',
             'email.email' => 'البريد الإلكتروني غير صالح',
@@ -52,7 +52,7 @@ class SupportController extends Controller
             'subject.string' => 'الموضوع يجب أن يكون نص',
             'message.required' => 'الرسالة مطلوبة',
             'message.min' => 'الرسالة يجب ألا تقل عن 10 حروف',
-            'message.max' => 'الرسالة يجب ألا تزيد عن 40 حروف',
+            'message.max' => 'الرسالة يجب ألا تزيد عن 50 حروف',
         ]);
 
         if ($validator->fails()) {
@@ -105,13 +105,13 @@ class SupportController extends Controller
     {
         $prince_word = Support::orderBy('id', 'asc')->first()->message;
         $words = explode(" ", $prince_word);
-        $prince_word = implode(" ", array_slice($words, 0, 11));
+        $prince_word = implode(" ", array_slice($words, 0, 15));
 
         if ($request->ajax()) {
 
             $prince_word = Support::orderBy('id', 'asc')->first()->message;
             $words = explode(" ", $prince_word);
-            $prince_word = implode(" ", array_slice($words, 0, 11));
+            $prince_word = implode(" ", array_slice($words, 0, 15));
 
             $count = Support::count();
             $lastMessage = Support::where('id', '!=', 1)

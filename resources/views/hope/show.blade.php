@@ -72,6 +72,15 @@
             from { opacity: 1; transform: scale(1); }
             to { opacity: 0; transform: scale(0); }
         }
+
+        img.hand[data-index="16"] {
+            display: none;
+        }
+
+        img.hand[data-index="15"] {
+            display: none;
+        }
+
     </style>
 
     <div id="container">
@@ -85,76 +94,40 @@
     <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.0/dist/echo.iife.js"></script>
 
     <script>
-
-        // إعداد Echo مع Pusher
-        //window.Pusher = Pusher;
-        //window.Echo = new Echo({
-           // broadcaster: "pusher",
-           // key: "{{ env('PUSHER_APP_KEY') }}",
-           // cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
-           // wsHost: 'ws-' + '{{ env("PUSHER_APP_CLUSTER") }}' + '.pusher.com',
-            //wsPort: 443,
-            //wssPort: 443,
-           // forceTLS: true,
-           // enabledTransports: ['ws', 'wss'], // امنع sockjs/xhr_streaming
-        //});
-
         let hands = [];
-        const maxHands = 41; // 20 صغير + 20 كبير + اليد 41
+        const maxHands = 30; // قلب واحد فيه 30 كف
         let positions = [];
+
+        // 🔹 هنا نحط الأرقام اللي عايزين نتجاهلها
+        const skipIndexes = [0, 1, 15, 16];
+        // ملاحظة: الـ index يبدأ من 0 مش من 1
+        // يعني 0 = الكف الأول، 1 = الكف الثاني، 15 = الكف رقم 16
 
         function calculatePositions() {
             positions = [];
 
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
+            const baseScale = Math.min(window.innerWidth, window.innerHeight) / 35;
 
-            // المقياس الأساسي حسب حجم الشاشة
-            const baseScale = Math.min(window.innerWidth, window.innerHeight) / 40;
-
-            // 🔹 القلب الصغير (20 كف)
-            const smallScale = baseScale * 1;
-            for (let i = 0; i < 20; i++) {
-                const t = Math.PI - (i / 20) * 2 * Math.PI;
+            for (let i = 0; i < maxHands; i++) {
+                const t = (i / maxHands) * 2 * Math.PI; // يبدأ من فوق
                 const x = 16 * Math.pow(Math.sin(t), 3);
-                const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+                const y =
+                    13 * Math.cos(t) -
+                    5 * Math.cos(2 * t) -
+                    2 * Math.cos(3 * t) -
+                    Math.cos(4 * t);
 
                 positions.push({
-                    x: centerX + x * smallScale,
-                    y: centerY - y * smallScale
+                    x: centerX + x * baseScale,
+                    y: centerY - y * baseScale,
                 });
             }
-
-            // 🔹 القلب الكبير — خلي الفرق بسيط
-            // خلي القلب الكبير أوسع + نزود فرق مسافة منتظم
-            const spacing = baseScale * 4; // 🔹 المسافة بين القلبين
-            const bigScale = smallScale * 1.3;
-            const offsetBigY = -baseScale * 0.5; // نخليه في نفس المركز العمودي
-
-            //const bigScale = baseScale * 1.3;   // كان 1.5 → صغّرنا
-            //const offsetBigY = -baseScale * 1;  // كان -3 → قربنا لتحت
-            for (let i = 0; i < 20; i++) {
-                const t = Math.PI - (i / 20) * 2 * Math.PI;
-                const x = 16 * Math.pow(Math.sin(t), 3);
-                const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-
-                positions.push({
-                    x: centerX + x * bigScale,
-                    y: centerY - y * bigScale + offsetBigY
-                });
-            }
-
-            // 🔹 اليد رقم 41 (على يمين القلب الكبير)
-            positions.push({
-                x: centerX + bigScale * 10,  // يمين القلب الكبير
-                y: centerY + bigScale * 4  // Slight down
-            });
         }
 
-        // أول حساب
         calculatePositions();
 
-        // إعادة الحساب عند تغيير حجم الشاشة
         window.addEventListener("resize", () => {
             calculatePositions();
             hands.forEach((handEl, index) => {
@@ -169,119 +142,98 @@
         var hands_counts = 0;
         var last_hands = 0;
 
+        $(document).ready(function () {
+            drawInitialHands();
 
-        // إرسال Ajax للـ Laravel → يولد event عبر Pusher
-        $(document).ready(function() {
-            // Define the function that sends the AJAX request
             function sendAjaxRequest() {
                 $.ajax({
-                    url: '{{ url('/hope/hands') }}', // Replace with your server-side script URL
-                    type: 'GET', // Or 'POST', depending on your needs
-                    dataType: 'json', // Expected data type from the server
-                    success: function(response) {
-                      hands_counts = response.count;
-                      //console.log(hands_counts);
-                      if(hands_counts > last_hands){
-                          deaw_hand(hands);
-                      }
-                      last_hands = hands_counts;
+                    url: "{{ url('/hope/hands') }}",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (response) {
+                        hands_counts = response.count;
+
+                        if (hands_counts > last_hands) {
+                            drawHand();
+                        }
+
+                        last_hands = hands_counts;
                     },
-                    error: function(xhr, status, error) {
-                        // Handle any errors that occur during the request
-                        console.error('AJAX request failed:', status, error);
-                    }
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed:", status, error);
+                    },
                 });
             }
 
-            // Set the interval to call sendAjaxRequest every 1000 milliseconds (1 second)
             setInterval(sendAjaxRequest, 2000);
         });
 
-        // الاستماع للقناة
-      /*
-        window.Echo.channel("hope-channel")
-            .listen(".new-hand", (data) => {
-                const container = document.getElementById("container");
+        function drawInitialHands() {
+            // لو عايز تضيف يدين في البداية بشكل يدوي ممكن هنا
+            last_hands = 0;
+            hands_counts = 0;
+        }
 
-                if (hands.length < maxHands) {
-                    const handEl = document.createElement("img");
-                    handEl.src = "{{ asset('storage/hand.png') }}";
-                    handEl.className = "hand";
-                    handEl.dataset.index = hands.length;
-
-                    const pos = positions[hands.length];
-                    handEl.style.position = "absolute";
-                    handEl.style.left = pos.x + "px";
-                    handEl.style.top = pos.y + "px";
-
-                    container.appendChild(handEl);
-                    hands.push(handEl);
-                } else {
-                    const oldHand = hands.find(h => h.dataset.index == maxHands - 1);
-                    if (oldHand) {
-                        oldHand.classList.add("fade-out");
-                        setTimeout(() => oldHand.remove(), 500);
-                        hands = hands.filter(h => h !== oldHand);
-                    }
-
-                    const handEl = document.createElement("img");
-                    handEl.src = "{{ asset('storage/hand.png') }}";
-                    handEl.className = "hand";
-                    handEl.dataset.index = maxHands - 1;
-
-                    const pos = positions[maxHands - 1];
-                    handEl.style.position = "absolute";
-                    handEl.style.left = pos.x + "px";
-                    handEl.style.top = pos.y + "px";
-
-                    container.appendChild(handEl);
-                    hands.push(handEl);
-                }
-            });
-
-        */
-
-        function deaw_hand(hands){
+        function drawHand() {
             const container = document.getElementById("container");
 
+            // نتأكد إن العدد أقل من maxHands
             if (hands.length < maxHands) {
-                const handEl = document.createElement("img");
-                handEl.src = "{{ asset('storage/hand.png') }}";
-                handEl.className = "hand";
-                handEl.dataset.index = hands.length;
+                let nextIndex = hands.length;
 
-                const pos = positions[hands.length];
-                handEl.style.position = "absolute";
+                // نتخطى أي index في skipIndexes
+                while (skipIndexes.includes(nextIndex) && nextIndex < maxHands) {
+                    nextIndex++;
+                }
+
+                if (nextIndex >= maxHands) return;
+
+                const handEl = document.createElement("img");
+                handEl.src = "{{ asset('storage/right_hand.png') }}";
+                handEl.className = "hand";
+                handEl.dataset.index = nextIndex;
+
+                const pos = positions[nextIndex];
                 handEl.style.left = pos.x + "px";
                 handEl.style.top = pos.y + "px";
 
                 container.appendChild(handEl);
                 hands.push(handEl);
             } else {
-                const oldHand = hands.find(h => h.dataset.index == maxHands - 1);
+                // 🔹 بعد ما اكتمل القلب (30 كف)
+                // نشيل آخر كف ونضيفه من جديد
+                const lastIndex = maxHands - 1;
+                const oldHand = hands[lastIndex];
                 if (oldHand) {
-                    oldHand.classList.add("fade-out");
-                    setTimeout(() => oldHand.remove(), 500);
-                    hands = hands.filter(h => h !== oldHand);
+                    oldHand.remove();
+                    hands.splice(lastIndex, 1);
                 }
 
-                const handEl = document.createElement("img");
-                handEl.src = "{{ asset('storage/hand.png') }}";
-                handEl.className = "hand";
-                handEl.dataset.index = maxHands - 1;
+                const newHand = document.createElement("img");
+                newHand.src = "{{ asset('storage/right_hand.png') }}";
+                newHand.className = "hand";
+                newHand.dataset.index = lastIndex;
 
-                const pos = positions[maxHands - 1];
-                handEl.style.position = "absolute";
-                handEl.style.left = pos.x + "px";
-                handEl.style.top = pos.y + "px";
+                const pos = positions[lastIndex];
+                newHand.style.left = pos.x + "px";
+                newHand.style.top = pos.y + "px";
 
-                container.appendChild(handEl);
-                hands.push(handEl);
+                container.appendChild(newHand);
+                hands.push(newHand);
             }
+        }
 
+        function resetHands() {
+            hands.forEach((h) => h.remove());
+            hands = [];
             calculatePositions();
+            last_hands = 0;
+            hands_counts = 0;
         }
     </script>
+
+
+
 
 
 @endsection
