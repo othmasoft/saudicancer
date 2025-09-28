@@ -204,11 +204,10 @@
         function drawHand() {
             const container = document.getElementById("container");
 
-            // نتأكد إن العدد أقل من maxHands
             if (hands.length < maxHands) {
                 let nextIndex = hands.length;
 
-                // نتخطى أي index في skipIndexes
+                // لو عايز تتخطى إندكسات معينة (0,1,15,16 مثلاً)
                 // while (skipIndexes.includes(nextIndex) && nextIndex < maxHands) {
                 //     nextIndex++;
                 // }
@@ -227,43 +226,28 @@
                 container.appendChild(handEl);
                 hands.push(handEl);
 
-                if(hands.length == 15){
+                // لو عند النص تعمل قفزة
+                if (hands.length == 15) {
                     drawHand();
                     drawHand();
                 }
+
             } else {
-                // 🔹 بعد ما اكتمل القلب (30 كف)
-                // نشيل آخر كف ونضيفه من جديد
-                const lastIndex = maxHands - 1;
-                const oldHand = hands[lastIndex];
-                if (oldHand) {
-                    oldHand.remove();
-                    hands.splice(lastIndex, 1);
-                }
-
-                const newHand = document.createElement("img");
-                newHand.src = "{{ asset('storage/right_hand.png') }}";
-                newHand.className = "hand";
-                newHand.dataset.index = lastIndex;
-
-                const pos = positions[lastIndex];
-                newHand.style.left = pos.x + "px";
-                newHand.style.top = pos.y + "px";
-
-
-
-                container.appendChild(newHand);
-                hands.push(newHand);
+                // ✅ بعد ما يكمل 30، نفضي ونبدأ من الأول
+                resetHands();
+                drawHand(); // نرسم أول كف بعد الريسيت
             }
         }
 
         function resetHands() {
+            const container = document.getElementById("container");
             hands.forEach((h) => h.remove());
             hands = [];
             calculatePositions();
             last_hands = 0;
             hands_counts = 0;
         }
+
     </script>
 
 

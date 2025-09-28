@@ -42,7 +42,7 @@
     </style>
 
     <div id="touch-area">
-        <span class="hint">اضغط ببصمتك لإضافة كف</span>
+        <span class="hint"> ضـع كـفك </span>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -50,23 +50,27 @@
         const area = document.getElementById("touch-area");
 
         area.addEventListener("click", () => {
-            showHand();
 
             // إرسال Ajax للـ Laravel → يولد event عبر Pusher
             $.post("{{ url('/hope/add-hand') }}", {
                 _token: "{{ csrf_token() }}",
                 hand: "🖐️"
             });
+
+            setTimeout(() => {
+                showHand();
+            }, 1000);
+
         });
 
         function showHand() {
             area.innerHTML = `
-        <div class="hand">
-            <img src="{{ asset('storage/right_hand.png') }}" />
-        </div>
-    `;
+                <div class="hand">
+                    <img src="{{ asset('storage/right_hand.png') }}" />
+                </div>
+            `;
             setTimeout(() => {
-                area.innerHTML = `<span class="hint">اضغط ببصمتك لإضافة كف</span>`;
+                area.innerHTML = `<span class="hint">  ضـع كـفك   </span>`;
             }, 1000);
         }
 
