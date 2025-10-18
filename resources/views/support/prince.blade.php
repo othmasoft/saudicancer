@@ -96,12 +96,11 @@
                                            class="form-control @error('message') is-invalid @enderror"
                                            id="message"
                                            name="message"
-                                           placeholder="أكتب رسالة دعم هنا ..."
                                            minlength="10"
-                                           maxlength="50"
+                                           maxlength="100"
                                            required
                                            onkeydown="if(event.key==='Enter'){event.preventDefault(); this.form.submit();}">
-                                    <div class="form-text">من 10 إلى 50 حرف</div>
+                                    <div class="form-text">من 10 إلى 100 حرف</div>
                                     @error('message')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

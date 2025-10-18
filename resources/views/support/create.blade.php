@@ -99,7 +99,7 @@
                                            name="message"
                                            placeholder="أكتب رسالة دعم هنا ..."
                                            minlength="10"
-                                           maxlength="25"
+                                           maxlength="32"
                                            required
                                            onkeydown="if(event.key==='Enter'){event.preventDefault(); this.form.submit();}">
                                     <div class="form-text">من 10 إلى 25 حرف</div>

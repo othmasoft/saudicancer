@@ -108,9 +108,8 @@
                             <textarea class="form-control @error('message') is-invalid @enderror"
                                       id="message"
                                       name="message"
-                                      rows="8"
+                                      rows="6"
                                       placeholder="اكتب رسالتك هنا... شارك أحلامك، أهدافك، أو كلمات تشجيعية لنفسك أو لأحبائك.
-
 مثال:
 عزيزي أنا المستقبل،
 أتمنى أن تكون قد حققت أهدافك التي وضعتها اليوم...
@@ -151,43 +150,6 @@
                 </div>
             </div>
 
-            {{-- Info Cards --}}
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card border-0 bg-light-custom h-100">
-                        <div class="card-body text-center">
-                            <i class="bi bi-calendar-heart text-primary1 mb-2" style="font-size: 2rem;"></i>
-                            <h6 class="text-primary1">متى ستصل؟</h6>
-                            <small class="text-muted">
-                                ستصل رسالتك بعد سنة كاملة من اليوم
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-3 mt-md-0">
-                    <div class="card border-0 bg-light-custom h-100">
-                        <div class="card-body text-center">
-                            <i class="bi bi-shield-check text-success mb-2" style="font-size: 2rem;"></i>
-                            <h6 class="text-primary1">أمان تام</h6>
-                            <small class="text-muted">
-                                رسالتك محفوظة بأمان ولن يراها أحد غيرك
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-3 mt-md-0">
-                    <div class="card border-0 bg-light-custom h-100">
-                        <div class="card-body text-center">
-                            <i class="bi bi-heart-fill text-danger mb-2" style="font-size: 2rem;"></i>
-                            <h6 class="text-primary1">رسالة أمل</h6>
-                            <small class="text-muted">
-                                مفاجأة جميلة ستذكرك بأحلامك وآمالك
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- Examples Card --}}
         </div>
     </div>
 

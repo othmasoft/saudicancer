@@ -19,6 +19,11 @@ Route::get('/clear-cache', function() {
     return 'Application cache has been cleared';
 });
 
+
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // Future Page
@@ -67,8 +72,6 @@ Route::get('/support/show', [SupportController::class, 'show'])->name('support.s
 
 
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
 
 Route::group(['namespace' => 'Auth'], function () {
 
@@ -82,7 +85,7 @@ Route::group(['namespace' => 'Auth'], function () {
 });
 
 // Admin routes (protected by auth and admin middleware)
-Route::middleware(['auth'])->group(function () {
+//Route::middleware(['auth'])->group(function () {
     Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
     Route::get('/support/prince', [SupportController::class, 'prince'])->name('support.prince');
     Route::post('/support', [SupportController::class, 'store'])->name('support.store');
@@ -91,12 +94,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hope/create2', [HopeController::class, 'create2'])->name('hope.create2');
 
 
-//    Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');
-//    Route::patch('/admin/support/{id}/status', [SupportController::class, 'updateStatus'])->name('admin.support.status');
-//    Route::post('/admin/support/{id}/response', [SupportController::class, 'addResponse'])->name('admin.support.response');
-//    Route::delete('/admin/support/{id}', [SupportController::class, 'destroy'])->name('admin.support.delete');
-//    Route::get('/admin/support/stats', [SupportController::class, 'getStats'])->name('admin.support.stats');
-});
+//});
 
 //User::create([
 //    'name' => 'Admin',

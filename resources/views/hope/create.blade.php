@@ -49,8 +49,13 @@
     <script>
         const area = document.getElementById("touch-area");
 
-        area.addEventListener("click", () => {
 
+        // نسمع للـ click + اللمس المتعدد
+        //area.addEventListener("click", handleTouch);
+        area.addEventListener("touchstart", handleTouch);
+
+        function handleTouch(e) {
+            e.preventDefault(); // يمنع السلوك الافتراضي
             // إرسال Ajax للـ Laravel → يولد event عبر Pusher
             $.post("{{ url('/hope/add-hand') }}", {
                 _token: "{{ csrf_token() }}",
@@ -60,8 +65,7 @@
             setTimeout(() => {
                 showHand();
             }, 1000);
-
-        });
+        }
 
         function showHand() {
             area.innerHTML = `

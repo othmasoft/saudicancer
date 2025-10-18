@@ -44,7 +44,7 @@ class SupportController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20',
             'subject' => 'nullable|string|max:255',
-            'message' => 'required|string|min:10|max:50',
+            'message' => 'required|string|min:10|max:100',
         ], [
             'name.string' => 'الاسم يجب أن يكون نص',
             'email.email' => 'البريد الإلكتروني غير صالح',
@@ -109,9 +109,9 @@ class SupportController extends Controller
 
         if ($request->ajax()) {
 
-            $prince_word = Support::orderBy('id', 'asc')->first()->message;
-            $words = explode(" ", $prince_word);
-            $prince_word = implode(" ", array_slice($words, 0, 15));
+//            $prince_word = Support::orderBy('id', 'asc')->first()->message;
+//            $words = explode(" ", $prince_word);
+//            $prince_word = implode(" ", array_slice($words, 0, 15));
 
             $count = Support::count();
             $lastMessage = Support::where('id', '!=', 1)
@@ -119,10 +119,10 @@ class SupportController extends Controller
                 ->first();
 
             return response()->json([
-                'id'   => $lastMessage->id,
+                'id'   => $lastMessage->id ?? 0,
                 'count'   => $count,
                 'message' => $lastMessage ? trim($lastMessage->message) : null,
-                'prince_word' => $prince_word ? trim($prince_word) : null
+                //'prince_word' => $prince_word ? trim($prince_word) : null
             ]);
         }
 

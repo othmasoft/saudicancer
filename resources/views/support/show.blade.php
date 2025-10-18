@@ -113,7 +113,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 11px;
+                gap: 6px;
             }
 
             .prince-title {
@@ -131,7 +131,7 @@
             .prince-text {
                 color: #fff; /* النص أحمر */
                 max-width: 90%;
-                line-height: 1.6;
+                line-height: 1.5;
                 padding: 10px 18px;
                 border: 2px solid #8e2151; /* إطار أحمر */
                 border-radius: 10px;
@@ -141,7 +141,6 @@
 
 
         </style>
-
 
 
         @for($i = 1; $i <= 27; $i++)
@@ -204,40 +203,44 @@
 
         function fetchMessages() {
             $.get("{{ route('support.show') }}", (data) => {
-                if (data && data.message) {
-                    $('.prince-text').html(data.prince_word);
+                if (data) {
+                    //$('.prince-text').html(data.prince_word);
 
-                    let message = data.message.trim();
+                    if(data.id > 0){
+                        let message = data.message.trim();
 
-                    // نتأكد أنها رسالة جديدة (بالمقارنة مع الـ id مثلاً)
-                    if (lastMessageId !== data.id) {
-                        lastMessageId = data.id; // حفظ آخر id
 
-                        // لو عدينا 27 نبدأ من الأول ونمسح كل الرسائل
-                        if (currentIndex > totalBoxes) {
-                            $(".box").html("");
-                            $(".box").hide();
-                            $(".box1").show();
-                            currentIndex = 1;   // نرجع للبداية
-                            showOverlay();
+                        // نتأكد أنها رسالة جديدة (بالمقارنة مع الـ id مثلاً)
+                        if (lastMessageId !== data.id) {
+                            lastMessageId = data.id; // حفظ آخر id
+
+                            // لو عدينا 27 نبدأ من الأول ونمسح كل الرسائل
+                            if (currentIndex > totalBoxes) {
+                                $(".box").html("");
+                                $(".box").hide();
+                                $(".box1").show();
+                                currentIndex = 1;   // نرجع للبداية
+                                showOverlay();
+                            }
+
+                            if (currentIndex == totalBoxes) {
+                                hideOverlay();
+                            }
+
+                            // نضيف الرسالة في الصندوق الحالي
+                            $(`.box${currentIndex}`).show();
+                            $(`.box${currentIndex}`).html(message.substring(0, 40));
+                            // نضيف كلاس الوميض
+                            let box = $(`.box${currentIndex}`);
+                            box.addClass("flash");
+
+                            // بعد ثانية نشيله عشان ممكن يتكرر بعدين
+                            setTimeout(() => box.removeClass("flash"), 1000);
+
+                            currentIndex++;
                         }
-
-                        if (currentIndex == totalBoxes) {
-                            hideOverlay();
-                        }
-
-                        // نضيف الرسالة في الصندوق الحالي
-                        $(`.box${currentIndex}`).show();
-                        $(`.box${currentIndex}`).html(message.substring(0, 40));
-                        // نضيف كلاس الوميض
-                        let box = $(`.box${currentIndex}`);
-                        box.addClass("flash");
-
-                        // بعد ثانية نشيله عشان ممكن يتكرر بعدين
-                        setTimeout(() => box.removeClass("flash"), 1000);
-
-                        currentIndex++;
                     }
+
                 }
             });
         }
@@ -259,8 +262,7 @@
             let percentX = (mouseX / pageWidth) * 100;
             let percentY = (mouseY / pageHeight) * 100;
 
-            document.getElementById("mouse-pos").textContent =
-                "X: " + percentX.toFixed(2) + "% , Y: " + percentY.toFixed(2) + "%";
+           // document.getElementById("mouse-pos").textContent = "X: " + percentX.toFixed(2) + "% , Y: " + percentY.toFixed(2) + "%";
         });
     </script>
 
